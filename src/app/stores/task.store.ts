@@ -15,7 +15,6 @@ export class TaskStore {
     makeAutoObservable(this);
   }
 
-  // Actions
   setTasks(tasks: Task[]) {
     this.tasks = tasks;
   }
@@ -50,8 +49,6 @@ export class TaskStore {
         ...taskData,
         updatedAt: new Date()
       };
-      
-      // Update selected task if it's the one being edited
       if (this.selectedTask?.id === id) {
         this.selectedTask = this.tasks[index];
       }
@@ -81,7 +78,6 @@ export class TaskStore {
     return this.tasks.filter(t => t.status === TaskStatus.COMPLETED);
   }
 
-  // Helper
   private generateId(): string {
     return `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }

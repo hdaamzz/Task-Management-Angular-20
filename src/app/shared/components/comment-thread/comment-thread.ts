@@ -14,10 +14,10 @@ import { Comment } from '../../../core/models/comment.model';
 export class CommentThread {
   @Input() comments: Comment[] = [];
   @Input() taskId: string = '';
-  @Input() level: number = 0; // Nesting level for indentation
+  @Input() level: number = 0; 
 
   newCommentText: string = '';
-  authorName: string = 'Anonymous User'; // In real app, get from auth service
+  authorName: string = 'Anonymous User';
   replyingTo: string | null = null;
   replyText: { [key: string]: string } = {};
 

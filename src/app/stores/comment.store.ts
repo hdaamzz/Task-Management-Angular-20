@@ -13,7 +13,6 @@ export class CommentStore {
     makeAutoObservable(this);
   }
 
-  // Actions
   setComments(comments: Comment[]) {
     this.comments = comments;
   }
@@ -30,10 +29,8 @@ export class CommentStore {
     };
 
     if (parentId) {
-      // Add as reply to parent comment
       this.addReplyToComment(parentId, newComment);
     } else {
-      // Add as top-level comment
       this.comments.push(newComment);
     }
   }

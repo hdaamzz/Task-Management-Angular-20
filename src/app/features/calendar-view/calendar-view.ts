@@ -47,7 +47,6 @@ export class CalendarView  implements OnInit {
   ngOnInit() {
     this.loadTasks();
 
-    // React to task changes and update calendar
     reaction(
       () => this.taskStore.tasks.slice(),
       () => {
@@ -99,13 +98,13 @@ export class CalendarView  implements OnInit {
   getEventColor(status: TaskStatus): string {
     switch (status) {
       case TaskStatus.COMPLETED:
-        return '#27ae60'; // Green
+        return '#27ae60';
       case TaskStatus.IN_PROGRESS:
-        return '#f39c12'; // Orange
+        return '#f39c12'; 
       case TaskStatus.PENDING:
-        return '#e74c3c'; // Red
+        return '#e74c3c'; 
       default:
-        return '#95a5a6'; // Gray
+        return '#95a5a6';
     }
   }
 

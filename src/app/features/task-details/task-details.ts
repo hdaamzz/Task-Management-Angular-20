@@ -21,7 +21,7 @@ export class TaskDetails implements OnInit, OnDestroy {
   private disposeReaction: (() => void) | null = null;
 
   quillModules = {
-    toolbar: false // Read-only mode
+    toolbar: false 
   };
 
   constructor(
@@ -35,7 +35,6 @@ export class TaskDetails implements OnInit, OnDestroy {
     this.taskId = this.route.snapshot.paramMap.get('id') || '';
     this.loadTask();
 
-    // React to changes in the task store
     this.disposeReaction = reaction(
       () => this.taskStore.tasks.find(t => t.id === this.taskId),
       (foundTask) => {
@@ -56,7 +55,6 @@ export class TaskDetails implements OnInit, OnDestroy {
       this.task = foundTask;
       this.taskStore.setSelectedTask(foundTask);
     } else {
-      // Task not found, redirect to list
       this.router.navigate(['/tasks']);
     }
   }

@@ -61,10 +61,8 @@ export class TaskForm implements OnInit {
       };
 
       if (this.task) {
-        // Update existing task
         this.taskStore.updateTask(this.task.id, formData);
       } else {
-        // Add new task
         this.taskStore.addTask(formData);
       }
 
