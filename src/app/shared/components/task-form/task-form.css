@@ -1,102 +1,95 @@
-.task-form-container {
-    padding: 2rem;
+/* Quill Glassmorphic Theme */
+::ng-deep .quill-glassmorphic .ql-toolbar {
+  border: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem;
 }
 
-.task-form-container h2 {
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    color: #2c3e50;
+::ng-deep .quill-glassmorphic .ql-container {
+  border: none !important;
+  font-size: 1rem;
+  min-height: 200px;
 }
 
-.form-group {
-    margin-bottom: 1.5rem;
+::ng-deep .quill-glassmorphic .ql-editor {
+  color: #d1d5db;
+  min-height: 200px;
+  padding: 1rem;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #34495e;
-    font-weight: 500;
+::ng-deep .quill-glassmorphic .ql-editor.ql-blank::before {
+  color: rgba(156, 163, 175, 0.6);
+  font-style: normal;
 }
 
-.form-control {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
+/* Toolbar buttons */
+::ng-deep .quill-glassmorphic .ql-toolbar button {
+  color: rgba(255, 255, 255, 0.7) !important;
+  transition: all 0.2s;
 }
 
-.form-control:focus {
-    outline: none;
-    border-color: #3498db;
+::ng-deep .quill-glassmorphic .ql-toolbar button:hover {
+  color: #5C8374 !important;
+  background: rgba(92, 131, 116, 0.1) !important;
+  border-radius: 0.25rem;
 }
 
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+::ng-deep .quill-glassmorphic .ql-toolbar button.ql-active {
+  color: #5C8374 !important;
+  background: rgba(92, 131, 116, 0.2) !important;
+  border-radius: 0.25rem;
 }
 
-.error-message {
-    color: #e74c3c;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
+/* Toolbar stroke icons */
+::ng-deep .quill-glassmorphic .ql-toolbar .ql-stroke {
+  stroke: rgba(255, 255, 255, 0.7) !important;
 }
 
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid #ecf0f1;
+::ng-deep .quill-glassmorphic .ql-toolbar button:hover .ql-stroke,
+::ng-deep .quill-glassmorphic .ql-toolbar button.ql-active .ql-stroke {
+  stroke: #5C8374 !important;
 }
 
-.btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.3s;
+/* Toolbar fill icons */
+::ng-deep .quill-glassmorphic .ql-toolbar .ql-fill {
+  fill: rgba(255, 255, 255, 0.7) !important;
 }
 
-.btn-primary {
-    background: #3498db;
-    color: white;
+::ng-deep .quill-glassmorphic .ql-toolbar button:hover .ql-fill,
+::ng-deep .quill-glassmorphic .ql-toolbar button.ql-active .ql-fill {
+  fill: #5C8374 !important;
 }
 
-.btn-primary:hover:not(:disabled) {
-    background: #2980b9;
+/* Dropdowns */
+::ng-deep .quill-glassmorphic .ql-toolbar .ql-picker-label {
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
-.btn-primary:disabled {
-    background: #bdc3c7;
-    cursor: not-allowed;
+::ng-deep .quill-glassmorphic .ql-toolbar .ql-picker-label:hover {
+  color: #5C8374 !important;
 }
 
-.btn-secondary {
-    background: #ecf0f1;
-    color: #2c3e50;
+::ng-deep .quill-glassmorphic .ql-toolbar .ql-picker-options {
+  background: rgba(10, 31, 35, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
 }
 
-.btn-secondary:hover {
-    background: #d5dbdb;
+::ng-deep .quill-glassmorphic .ql-toolbar .ql-picker-item {
+  color: #d1d5db !important;
 }
 
-::ng-deep .quill-editor {
-    min-height: 200px;
+::ng-deep .quill-glassmorphic .ql-toolbar .ql-picker-item:hover {
+  color: #5C8374 !important;
+  background: rgba(92, 131, 116, 0.1);
+  border-radius: 0.25rem;
 }
 
-::ng-deep .ql-toolbar {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-}
-
-::ng-deep .ql-container {
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    font-size: 1rem;
+/* Date input styling for dark mode */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
 }

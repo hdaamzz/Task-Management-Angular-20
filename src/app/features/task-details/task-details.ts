@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 export class TaskDetails implements OnInit, OnDestroy {
   task: Task | null = null;
   taskId: string = '';
+  TaskStatus = TaskStatus;
   private disposeReaction: (() => void) | null = null;
 
   quillModules = {
@@ -101,4 +102,12 @@ export class TaskDetails implements OnInit, OnDestroy {
   get comments() {
     return this.commentStore.getCommentsByTaskId(this.taskId);
   }
+  getStatusLabel(status: TaskStatus): string {
+  switch (status) {
+    case TaskStatus.COMPLETED: return 'COMPLETED';
+    case TaskStatus.IN_PROGRESS: return 'IN_PROGRESS';
+    case TaskStatus.PENDING: return 'PENDING';
+    default: return 'UNKNOWN';
+  }
+}
 }

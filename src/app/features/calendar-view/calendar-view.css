@@ -1,209 +1,96 @@
-.calendar-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-}
-
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.calendar-header h2 {
-    margin: 0;
-    color: #2c3e50;
-    font-size: 1.75rem;
-}
-
-.legend {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    color: #2c3e50;
-}
-
-.legend-color {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
-    display: inline-block;
-}
-
-.legend-color.pending {
-    background: #e74c3c;
-}
-
-.legend-color.in-progress {
-    background: #f39c12;
-}
-
-.legend-color.completed {
-    background: #27ae60;
-}
-
-.loading {
-    text-align: center;
-    padding: 4rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-
-.spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.loading p {
-    margin: 0;
-    color: #6c757d;
-    font-size: 1.1rem;
-}
-
-.error {
-    text-align: center;
-    padding: 3rem;
-    color: #e74c3c;
-    background: #fee;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-}
-
-.calendar-wrapper {
-    margin-bottom: 2rem;
-}
-
-.calendar-footer {
-    text-align: center;
-    padding-top: 1.5rem;
-    border-top: 1px solid #e9ecef;
-}
-
-.hint {
-    margin: 0;
-    color: #6c757d;
-    font-style: italic;
-    font-size: 0.95rem;
-}
-
-/* FullCalendar Custom Styling */
 ::ng-deep .fc {
-    font-family: inherit;
+  font-family: inherit;
 }
 
 ::ng-deep .fc-toolbar-title {
-    font-size: 1.5rem !important;
-    color: #2c3e50;
-    font-weight: 600;
+  font-size: 1.5rem !important;
+  color: #ffffff !important;
+  font-weight: 700;
 }
 
 ::ng-deep .fc-button {
-    background: #3498db !important;
-    border-color: #3498db !important;
-    text-transform: capitalize !important;
-    font-weight: 500;
+  background: linear-gradient(to right, #5C8374, #93B1A6) !important;
+  border: none !important;
+  text-transform: capitalize !important;
+  font-weight: 600;
+  border-radius: 0.75rem !important;
+  padding: 0.5rem 1rem !important;
+  transition: all 0.3s !important;
 }
 
 ::ng-deep .fc-button:hover {
-    background: #2980b9 !important;
-    border-color: #2980b9 !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 4px 12px rgba(92, 131, 116, 0.4) !important;
 }
 
 ::ng-deep .fc-button-active {
-    background: #2c3e50 !important;
-    border-color: #2c3e50 !important;
+  background: linear-gradient(to right, #93B1A6, #5C8374) !important;
 }
 
 ::ng-deep .fc-day-today {
-    background: #e8f4fd !important;
+  background: rgba(92, 131, 116, 0.15) !important;
 }
 
 ::ng-deep .fc-event {
-    cursor: pointer;
-    border-radius: 4px;
-    padding: 2px 4px;
-    font-size: 0.85rem;
-    font-weight: 500;
+  cursor: pointer;
+  border-radius: 0.5rem !important;
+  padding: 4px 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none !important;
+  transition: all 0.2s !important;
 }
 
 ::ng-deep .fc-event:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-::ng-deep .fc-daygrid-event {
-    white-space: normal;
-    align-items: flex-start;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 ::ng-deep .fc-daygrid-day-number {
-    color: #2c3e50;
-    font-weight: 500;
+  color: #d1d5db !important;
+  font-weight: 600;
+  padding: 0.5rem;
 }
 
 ::ng-deep .fc-col-header-cell {
-    background: #f8f9fa;
-    font-weight: 600;
-    color: #2c3e50;
+  background: rgba(255, 255, 255, 0.05) !important;
+  font-weight: 700;
+  color: #93B1A6 !important;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 1rem 0.5rem !important;
 }
 
 ::ng-deep .fc-scrollgrid {
-    border-color: #e9ecef !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 1rem;
+  overflow: hidden;
 }
 
 ::ng-deep .fc-theme-standard td,
 ::ng-deep .fc-theme-standard th {
-    border-color: #e9ecef !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+::ng-deep .fc-daygrid-day-frame {
+  background: rgba(255, 255, 255, 0.02);
+  transition: background 0.2s;
+}
+
+::ng-deep .fc-daygrid-day-frame:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .calendar-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+  ::ng-deep .fc-toolbar {
+    flex-direction: column !important;
+    gap: 1rem;
+  }
 
-    .legend {
-        width: 100%;
-    }
-
-    ::ng-deep .fc-toolbar {
-        flex-direction: column !important;
-        gap: 1rem;
-    }
-
-    ::ng-deep .fc-toolbar-chunk {
-        display: flex;
-        justify-content: center;
-    }
+  ::ng-deep .fc-toolbar-chunk {
+    display: flex;
+    justify-content: center;
+  }
 }

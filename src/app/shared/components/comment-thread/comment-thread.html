@@ -1,104 +1,130 @@
-<div class="comment-thread" [ngClass]="getIndentClass()">
+<div class="w-full" [ngClass]="getPaddingClass()">
+  
+  <!-- Add Top Level Comment -->
   @if (level === 0) {
-    <div class="add-comment">
-      <div class="comment-input-wrapper">
-        <textarea
-          [(ngModel)]="newCommentText"
-          placeholder="Add a comment..."
-          rows="3"
-          class="comment-input"
-          (keydown.ctrl.enter)="addTopLevelComment()">
-        </textarea>
+    <div class="mb-8">
+      <div class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 hover:bg-white/15 transition-all duration-300">
+        <div class="flex flex-col gap-4">
+          <textarea
+            [(ngModel)]="newCommentText"
+            placeholder="Add a comment..."
+            rows="3"
+            class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5C8374] focus:border-transparent transition-all duration-300 resize-y"
+            (keydown.ctrl.enter)="addTopLevelComment()">
+          </textarea>
 
-        <button
-          class="btn btn-primary btn-sm"
-          (click)="addTopLevelComment()"
-          [disabled]="!newCommentText.trim()">
-          💬 Post Comment
-        </button>
+          <button
+            class="group px-6 py-3 bg-linear-to-r from-[#5C8374] to-[#93B1A6] hover:from-[#93B1A6] hover:to-[#5C8374] rounded-xl text-white font-semibold transition-all duration-300 hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2 self-end"
+            (click)="addTopLevelComment()"
+            [disabled]="!newCommentText.trim()">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            Post Comment
+          </button>
+        </div>
       </div>
     </div>
   }
 
-  <!-- Display comments -->
-  <div class="comments-list">
+  <!-- Comments List -->
+  <div class="flex flex-col gap-4">
     @for (comment of comments; track comment.id) {
-      <div class="comment-item">
-        <div class="comment-card">
+      <div class="w-full">
+        <div class="group bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 hover:bg-white/15 transition-all duration-300">
 
-          <div class="comment-header">
-            <div class="author-info">
-              <span class="avatar">
+          <!-- Comment Header -->
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center gap-3">
+              <!-- Avatar -->
+              <div class="w-10 h-10 rounded-full bg-linear-to-br from-[#5C8374] to-[#93B1A6] flex items-center justify-center text-white font-bold text-lg shadow-lg shrink-0">
                 {{ comment.author.charAt(0).toUpperCase() }}
-              </span>
+              </div>
 
-              <div class="author-details">
-                <span class="author-name">{{ comment.author }}</span>
-                <span class="comment-date">
-                  {{ formatDate(comment.createdAt) }}
-                </span>
+              <!-- Author Details -->
+              <div class="flex flex-col">
+                <span class="text-white font-semibold text-sm">{{ comment.author }}</span>
+                <span class="text-gray-400 text-xs">{{ formatDate(comment.createdAt) }}</span>
               </div>
             </div>
 
+            <!-- Delete Button -->
             <button
-              class="btn-delete"
+              class="p-2 hover:bg-red-500/20 rounded-xl transition-all duration-300 hover:scale-110 group/delete shrink-0"
               (click)="deleteComment(comment.id)"
               title="Delete comment">
-              🗑️
+              <svg class="w-5 h-5 text-gray-400 group-hover/delete:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
             </button>
           </div>
 
-          <div class="comment-content">
+          <!-- Comment Content -->
+          <div class="text-gray-300 leading-relaxed mb-4 whitespace-pre-wrap wrap-break-word">
             {{ comment.content }}
           </div>
 
-          <div class="comment-actions">
+          <!-- Comment Actions -->
+          <div class="flex items-center gap-4">
             @if (replyingTo !== comment.id) {
-              <button class="btn-reply" (click)="startReply(comment.id)">
-                ↩️ Reply
+              <button 
+                class="flex items-center gap-2 text-[#93B1A6] hover:text-[#5C8374] font-medium text-sm transition-colors duration-300"
+                (click)="startReply(comment.id)">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
+                </svg>
+                Reply
               </button>
             }
 
-            @if (comment.replies.length > 0) {
-              <span class="replies-count">
+            @if (comment.replies && comment.replies.length > 0) {
+              <span class="flex items-center gap-1.5 text-gray-400 text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
                 {{ comment.replies.length }}
                 {{ comment.replies.length === 1 ? 'reply' : 'replies' }}
               </span>
             }
           </div>
 
-          <!-- Reply input -->
+          <!-- Reply Input -->
           @if (replyingTo === comment.id) {
-            <div class="reply-input-wrapper">
-              <textarea
-                [(ngModel)]="replyText[comment.id]"
-                placeholder="Write a reply..."
-                rows="2"
-                class="comment-input"
-                (keydown.ctrl.enter)="addReply(comment.id)">
-              </textarea>
+            <div class="mt-4 pt-4 border-t border-white/10">
+              <div class="flex flex-col gap-3">
+                <textarea
+                  [(ngModel)]="replyText[comment.id]"
+                  placeholder="Write a reply..."
+                  rows="2"
+                  class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5C8374] focus:border-transparent transition-all duration-300 resize-y"
+                  (keydown.ctrl.enter)="addReply(comment.id)">
+                </textarea>
 
-              <div class="reply-actions">
-                <button
-                  class="btn btn-secondary btn-sm"
-                  (click)="cancelReply()">
-                  Cancel
-                </button>
+                <div class="flex justify-end gap-3">
+                  <button
+                    class="px-4 py-2 bg-white/10 hover:bg-white/15 backdrop-blur-sm border border-white/20 hover:border-white/30 rounded-xl text-white font-semibold text-sm transition-all duration-300 hover:scale-105"
+                    (click)="cancelReply()">
+                    Cancel
+                  </button>
 
-                <button
-                  class="btn btn-primary btn-sm"
-                  (click)="addReply(comment.id)"
-                  [disabled]="!replyText[comment.id]?.trim()">
-                  Post Reply
-                </button>
+                  <button
+                    class="px-4 py-2 bg-linear-to-r from-[#5C8374] to-[#93B1A6] hover:from-[#93B1A6] hover:to-[#5C8374] rounded-xl text-white font-semibold text-sm transition-all duration-300 hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                    (click)="addReply(comment.id)"
+                    [disabled]="!replyText[comment.id]?.trim()">
+                    Post Reply
+                  </button>
+                </div>
               </div>
             </div>
           }
         </div>
 
-        <!-- Nested replies (recursive) -->
-        @if (comment.replies.length > 0) {
-          <div class="nested-replies">
+        <!-- Nested Replies (Recursive) -->
+        @if (comment.replies && comment.replies.length > 0) {
+          <div class="mt-4 relative">
+            <!-- Connection Line -->
+            <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-linear-to-b from-[#5C8374]/50 to-transparent rounded-full"></div>
+            
             <app-comment-thread
               [comments]="comment.replies"
               [taskId]="taskId"
@@ -110,10 +136,15 @@
     }
   </div>
 
-  <!-- Empty state -->
+  <!-- Empty State -->
   @if (comments.length === 0 && level === 0) {
-    <div class="empty-comments">
-      <p>No comments yet. Be the first to comment!</p>
+    <div class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-12 text-center">
+      <div class="w-16 h-16 bg-[#5C8374]/20 rounded-2xl p-4 mx-auto mb-6">
+        <svg class="w-8 h-8 text-[#5C8374] mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+        </svg>
+      </div>
+      <p class="text-gray-400 text-lg italic">No comments yet. Be the first to comment!</p>
     </div>
   }
 </div>

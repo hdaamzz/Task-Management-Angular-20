@@ -45,6 +45,10 @@ export class CommentThread {
   cancelReply() {
     this.replyingTo = null;
   }
+  getPaddingClass(): string {
+    if (this.level === 0) return 'pl-0';
+    return 'pl-4';
+  }
 
   addReply(parentId: string) {
     const text = this.replyText[parentId];

@@ -20,7 +20,7 @@ export class TaskList implements OnInit {
   constructor(
     public taskStore: TaskStore,
     private taskService: TaskService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadTasks();

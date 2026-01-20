@@ -3,8 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'tasks',
-    pathMatch: 'full'
+    loadComponent:()=>import('./features/home/home').then(c=>c.Home)
   },
   {
     path: 'tasks',

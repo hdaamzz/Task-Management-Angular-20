@@ -2,8 +2,7 @@
 @import 'quill/dist/quill.snow.css';
 @import "tailwindcss";
 
-/* Reset and Base Styles */
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -19,7 +18,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -38,7 +36,6 @@ body {
   background: #555;
 }
 
-/* Typography */
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
   font-weight: 600;
@@ -49,7 +46,6 @@ p {
   margin: 0 0 1rem 0;
 }
 
-/* Links */
 a {
   color: #3498db;
   text-decoration: none;
@@ -60,12 +56,10 @@ a:hover {
   color: #2980b9;
 }
 
-/* Buttons */
 button {
   font-family: inherit;
 }
 
-/* Form Elements */
 input, textarea, select {
   font-family: inherit;
 }
@@ -74,7 +68,6 @@ input:focus, textarea:focus, select:focus {
   outline: none;
 }
 
-/* Utility Classes */
 .text-center {
   text-align: center;
 }
@@ -113,4 +106,4 @@ input:focus, textarea:focus, select:focus {
   body {
     font-size: 14px;
   }
-}
+} */
