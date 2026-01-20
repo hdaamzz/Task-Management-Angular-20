@@ -1,3 +1,15 @@
-<div class="bg-blue-600 text-white p-36 rounded-lg shadow-lg">
-  Tailwind v4 is working in Angular 20!
+<div class="app-container">
+  <nav class="navbar">
+    <div class="nav-brand">
+      <h1>📋 Task Manager</h1>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/tasks" routerLinkActive="active">Tasks</a>
+      <a routerLink="/calendar" routerLinkActive="active">Calendar</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
 </div>

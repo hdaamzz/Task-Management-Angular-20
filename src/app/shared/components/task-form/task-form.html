@@ -1,0 +1,103 @@
+<div class="task-form-container">
+  <h2>
+    {{ isEditMode ? 'Edit Task' : 'Create New Task' }}
+  </h2>
+
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+
+    <!-- Title -->
+    <div class="form-group">
+      <label for="title">Title *</label>
+
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        placeholder="Enter task title"
+        class="form-control" />
+
+      @if (taskForm.get('title')?.invalid && taskForm.get('title')?.touched) {
+        <div class="error-message">
+          @if (taskForm.get('title')?.errors?.['required']) {
+            <span>Title is required</span>
+          }
+          @if (taskForm.get('title')?.errors?.['minlength']) {
+            <span>Title must be at least 3 characters</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Description -->
+    <div class="form-group">
+      <label for="description">Description *</label>
+
+      <quill-editor
+        formControlName="description"
+        [modules]="quillConfig"
+        placeholder="Enter task description...">
+      </quill-editor>
+
+      @if (taskForm.get('description')?.invalid && taskForm.get('description')?.touched) {
+        <div class="error-message">
+          Description is required
+        </div>
+      }
+    </div>
+
+    <!-- Deadline + Status -->
+    <div class="form-row">
+
+      <div class="form-group">
+        <label for="deadline">Deadline *</label>
+
+        <input
+          id="deadline"
+          type="date"
+          formControlName="deadline"
+          class="form-control" />
+
+        @if (taskForm.get('deadline')?.invalid && taskForm.get('deadline')?.touched) {
+          <div class="error-message">
+            Deadline is required
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="status">Status *</label>
+
+        <select
+          id="status"
+          formControlName="status"
+          class="form-control">
+
+          @for (status of taskStatuses; track status) {
+            <option [value]="status">
+              {{ status }}
+            </option>
+          }
+        </select>
+      </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onCancel()">
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="taskForm.invalid">
+        {{ isEditMode ? 'Update Task' : 'Create Task' }}
+      </button>
+    </div>
+
+  </form>
+</div>

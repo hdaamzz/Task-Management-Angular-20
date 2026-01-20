@@ -1,0 +1,36 @@
+<div class="calendar-container">
+  <div class="calendar-header">
+    <h2>📅 Task Calendar</h2>
+    <div class="legend">
+      <div class="legend-item">
+        <span class="legend-color pending"></span>
+        <span>Pending</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-color in-progress"></span>
+        <span>In Progress</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-color completed"></span>
+        <span>Completed</span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="taskStore.isLoading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading calendar...</p>
+  </div>
+
+  <div *ngIf="taskStore.error" class="error">
+    {{ taskStore.error }}
+  </div>
+
+  <div class="calendar-wrapper" *ngIf="!taskStore.isLoading">
+    <full-calendar [options]="calendarOptions()"></full-calendar>
+  </div>
+
+  <div class="calendar-footer">
+    <p class="hint">💡 Click on any task to view its details</p>
+  </div>
+</div>

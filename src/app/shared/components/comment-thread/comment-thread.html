@@ -1,0 +1,119 @@
+<div class="comment-thread" [ngClass]="getIndentClass()">
+  @if (level === 0) {
+    <div class="add-comment">
+      <div class="comment-input-wrapper">
+        <textarea
+          [(ngModel)]="newCommentText"
+          placeholder="Add a comment..."
+          rows="3"
+          class="comment-input"
+          (keydown.ctrl.enter)="addTopLevelComment()">
+        </textarea>
+
+        <button
+          class="btn btn-primary btn-sm"
+          (click)="addTopLevelComment()"
+          [disabled]="!newCommentText.trim()">
+          💬 Post Comment
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Display comments -->
+  <div class="comments-list">
+    @for (comment of comments; track comment.id) {
+      <div class="comment-item">
+        <div class="comment-card">
+
+          <div class="comment-header">
+            <div class="author-info">
+              <span class="avatar">
+                {{ comment.author.charAt(0).toUpperCase() }}
+              </span>
+
+              <div class="author-details">
+                <span class="author-name">{{ comment.author }}</span>
+                <span class="comment-date">
+                  {{ formatDate(comment.createdAt) }}
+                </span>
+              </div>
+            </div>
+
+            <button
+              class="btn-delete"
+              (click)="deleteComment(comment.id)"
+              title="Delete comment">
+              🗑️
+            </button>
+          </div>
+
+          <div class="comment-content">
+            {{ comment.content }}
+          </div>
+
+          <div class="comment-actions">
+            @if (replyingTo !== comment.id) {
+              <button class="btn-reply" (click)="startReply(comment.id)">
+                ↩️ Reply
+              </button>
+            }
+
+            @if (comment.replies.length > 0) {
+              <span class="replies-count">
+                {{ comment.replies.length }}
+                {{ comment.replies.length === 1 ? 'reply' : 'replies' }}
+              </span>
+            }
+          </div>
+
+          <!-- Reply input -->
+          @if (replyingTo === comment.id) {
+            <div class="reply-input-wrapper">
+              <textarea
+                [(ngModel)]="replyText[comment.id]"
+                placeholder="Write a reply..."
+                rows="2"
+                class="comment-input"
+                (keydown.ctrl.enter)="addReply(comment.id)">
+              </textarea>
+
+              <div class="reply-actions">
+                <button
+                  class="btn btn-secondary btn-sm"
+                  (click)="cancelReply()">
+                  Cancel
+                </button>
+
+                <button
+                  class="btn btn-primary btn-sm"
+                  (click)="addReply(comment.id)"
+                  [disabled]="!replyText[comment.id]?.trim()">
+                  Post Reply
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Nested replies (recursive) -->
+        @if (comment.replies.length > 0) {
+          <div class="nested-replies">
+            <app-comment-thread
+              [comments]="comment.replies"
+              [taskId]="taskId"
+              [level]="level + 1">
+            </app-comment-thread>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Empty state -->
+  @if (comments.length === 0 && level === 0) {
+    <div class="empty-comments">
+      <p>No comments yet. Be the first to comment!</p>
+    </div>
+  }
+</div>

@@ -1,0 +1,76 @@
+@if (task) {
+  <div class="task-details-container">
+
+    <div class="header-actions">
+      <button class="btn btn-back" routerLink="/tasks">
+        ← Back to Tasks
+      </button>
+
+      <button class="btn btn-danger" (click)="deleteTask()">
+        🗑️ Delete Task
+      </button>
+    </div>
+
+    <div class="task-header">
+      <div class="title-section">
+        <h1>{{ task.title }}</h1>
+
+        <span
+          class="status-badge"
+          [ngClass]="getStatusClass(task.status)">
+          {{ task.status }}
+        </span>
+      </div>
+
+      <div class="meta-info">
+        <div class="meta-item">
+          <span class="label">📅 Deadline:</span>
+          <span class="value">{{ formatDate(task.deadline) }}</span>
+        </div>
+
+        <div class="meta-item">
+          <span class="label">🕒 Created:</span>
+          <span class="value">{{ formatDateTime(task.createdAt) }}</span>
+        </div>
+
+        <div class="meta-item">
+          <span class="label">✏️ Last Updated:</span>
+          <span class="value">{{ formatDateTime(task.updatedAt) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-content">
+      <h2>Description</h2>
+
+      <div class="description-viewer">
+        <quill-editor
+          [ngModel]="task.description"
+          [modules]="quillModules"
+          [readOnly]="true">
+        </quill-editor>
+      </div>
+    </div>
+
+    <div class="comments-section">
+      <h2>💬 Comments ({{ comments.length }})</h2>
+
+      <app-comment-thread
+        [comments]="comments"
+        [taskId]="taskId">
+      </app-comment-thread>
+    </div>
+
+  </div>
+} @else {
+  <div class="error-container">
+    <div class="error-message">
+      <h2>Task Not Found</h2>
+      <p>The task you're looking for doesn't exist.</p>
+
+      <button class="btn btn-primary" routerLink="/tasks">
+        Go to Task List
+      </button>
+    </div>
+  </div>
+}

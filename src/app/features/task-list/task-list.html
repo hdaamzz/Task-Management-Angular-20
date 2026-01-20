@@ -1,0 +1,87 @@
+<div class="task-list-container">
+
+  <div class="header">
+    <h2>Task List</h2>
+    <button class="btn btn-primary" (click)="openAddTaskForm()">
+      ➕ Add New Task
+    </button>
+  </div>
+
+  @if (taskStore.isLoading) {
+    <div class="loading">
+      Loading tasks...
+    </div>
+  }
+
+  @if (taskStore.error) {
+    <div class="error">
+      {{ taskStore.error }}
+    </div>
+  }
+
+  @if (!taskStore.isLoading && taskStore.tasks.length === 0) {
+    <div class="empty-state">
+      <p>No tasks found. Create your first task!</p>
+    </div>
+  }
+
+  @if (!taskStore.isLoading && taskStore.tasks.length > 0) {
+    <div class="tasks-grid">
+      @for (task of taskStore.tasks; track task.id) {
+        <div
+          class="task-card"
+          [routerLink]="['/tasks', task.id]">
+
+          <div class="task-header">
+            <h3>{{ task.title }}</h3>
+            <span
+              class="status-badge"
+              [ngClass]="getStatusClass(task.status)">
+              {{ task.status }}
+            </span>
+          </div>
+
+          <div class="task-description">
+            {{ getShortDescription(task.description) }}
+          </div>
+
+          <div class="task-footer">
+            <div class="deadline">
+              📅 {{ formatDate(task.deadline) }}
+            </div>
+
+            <div class="actions">
+              <button
+                class="btn-icon"
+                title="Edit"
+                (click)="openEditTaskForm(task); $event.stopPropagation()">
+                ✏️
+              </button>
+
+              <button
+                class="btn-icon"
+                title="Delete"
+                (click)="deleteTask(task, $event)">
+                🗑️
+              </button>
+            </div>
+          </div>
+
+        </div>
+      }
+    </div>
+  }
+
+</div>
+
+@if (showTaskForm) {
+  <div class="modal-overlay" (click)="closeTaskForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <app-task-form
+        [task]="editingTask"
+        (formSubmit)="closeTaskForm()"
+        (formCancel)="closeTaskForm()">
+      </app-task-form>
+    </div>
+  </div>
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "title": "Setup Project Infrastructure",
+    "description": "<p><strong>Initialize the Angular project</strong> with all necessary dependencies.</p><ul><li>Install Angular CLI</li><li>Setup MobX</li><li>Configure routing</li></ul>",
+    "deadline": "2026-01-25T00:00:00.000Z",
+    "status": "Completed",
+    "createdAt": "2026-01-15T10:00:00.000Z",
+    "updatedAt": "2026-01-18T14:30:00.000Z"
+  },
+  {
+    "id": "2",
+    "title": "Implement Task List Component",
+    "description": "<p>Create the main task list view with CRUD operations.</p><p><em>Requirements:</em></p><ul><li>Display all tasks</li><li>Add new tasks</li><li>Edit existing tasks</li><li>Delete tasks</li></ul>",
+    "deadline": "2026-01-28T00:00:00.000Z",
+    "status": "In Progress",
+    "createdAt": "2026-01-16T09:00:00.000Z",
+    "updatedAt": "2026-01-20T11:15:00.000Z"
+  },
+  {
+    "id": "3",
+    "title": "Add Rich Text Editor",
+    "description": "<p>Integrate <strong>ngx-quill</strong> for rich text editing capabilities.</p>",
+    "deadline": "2026-01-30T00:00:00.000Z",
+    "status": "Pending",
+    "createdAt": "2026-01-17T08:00:00.000Z",
+    "updatedAt": "2026-01-17T08:00:00.000Z"
+  },
+  {
+    "id": "4",
+    "title": "Implement Comment System",
+    "description": "<p>Build a multi-level comment thread system for task discussions.</p>",
+    "deadline": "2026-02-02T00:00:00.000Z",
+    "status": "Pending",
+    "createdAt": "2026-01-18T10:00:00.000Z",
+    "updatedAt": "2026-01-18T10:00:00.000Z"
+  },
+  {
+    "id": "5",
+    "title": "Calendar Integration",
+    "description": "<p>Add FullCalendar to display tasks by deadline with color coding based on status.</p>",
+    "deadline": "2026-02-05T00:00:00.000Z",
+    "status": "Pending",
+    "createdAt": "2026-01-19T12:00:00.000Z",
+    "updatedAt": "2026-01-19T12:00:00.000Z"
+  }
+]
