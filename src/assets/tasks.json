@@ -1,47 +1,47 @@
 [
   {
     "id": "1",
-    "title": "Setup Project Infrastructure",
-    "description": "<p><strong>Initialize the Angular project</strong> with all necessary dependencies.</p><ul><li>Install Angular CLI</li><li>Setup MobX</li><li>Configure routing</li></ul>",
-    "deadline": "2026-01-25T00:00:00.000Z",
+    "title": "Deploy Evendigo to AWS EC2",
+    "description": "<p><strong>Production deployment</strong> of event management platform.</p><ul><li>Docker containerization</li><li>Nginx reverse proxy + SSL (certbot)</li><li>CI/CD pipeline setup</li><li>MongoDB Atlas integration</li></ul>",
+    "deadline": "2026-01-28T00:00:00.000Z",
     "status": "Completed",
-    "createdAt": "2026-01-15T10:00:00.000Z",
-    "updatedAt": "2026-01-18T14:30:00.000Z"
+    "createdAt": "2026-01-10T09:00:00.000Z",
+    "updatedAt": "2026-01-25T16:30:00.000Z"
   },
   {
     "id": "2",
-    "title": "Implement Task List Component",
-    "description": "<p>Create the main task list view with CRUD operations.</p><p><em>Requirements:</em></p><ul><li>Display all tasks</li><li>Add new tasks</li><li>Edit existing tasks</li><li>Delete tasks</li></ul>",
-    "deadline": "2026-01-28T00:00:00.000Z",
+    "title": "RingRing WebRTC Optimization",
+    "description": "<p>Optimize real-time audio/video calling app.</p><p><em>Performance targets:</em></p><ul><li>Reduce bundle size &lt; 1MB</li><li>Implement Socket.io fallback</li><li>Screen sharing + recording</li><li>Mobile responsiveness (PWA)</li></ul>",
+    "deadline": "2026-02-01T00:00:00.000Z",
     "status": "In Progress",
-    "createdAt": "2026-01-16T09:00:00.000Z",
-    "updatedAt": "2026-01-20T11:15:00.000Z"
+    "createdAt": "2026-01-12T11:00:00.000Z",
+    "updatedAt": "2026-01-21T10:46:00.000Z"
   },
   {
     "id": "3",
-    "title": "Add Rich Text Editor",
-    "description": "<p>Integrate <strong>ngx-quill</strong> for rich text editing capabilities.</p>",
-    "deadline": "2026-01-30T00:00:00.000Z",
+    "title": "ShopEazy Checkout Flow",
+    "description": "<p>Implement secure e-commerce checkout.</p><ul><li>Stripe/Razorpay integration</li><li>Order management API</li><li>Inventory sync with MongoDB</li><li>Email notifications (nodemailer)</li></ul>",
+    "deadline": "2026-02-05T00:00:00.000Z",
     "status": "Pending",
-    "createdAt": "2026-01-17T08:00:00.000Z",
-    "updatedAt": "2026-01-17T08:00:00.000Z"
+    "createdAt": "2026-01-15T14:00:00.000Z",
+    "updatedAt": "2026-01-15T14:00:00.000Z"
   },
   {
     "id": "4",
-    "title": "Implement Comment System",
-    "description": "<p>Build a multi-level comment thread system for task discussions.</p>",
-    "deadline": "2026-02-02T00:00:00.000Z",
+    "title": "BlogBee Admin Dashboard",
+    "description": "<p>Build Angular admin panel for CMS.</p><ul><li>Rich text editor (ngx-quill)</li><li>Post scheduling</li><li>Analytics dashboard</li><li>SEO meta optimization</li></ul>",
+    "deadline": "2026-02-10T00:00:00.000Z",
     "status": "Pending",
-    "createdAt": "2026-01-18T10:00:00.000Z",
-    "updatedAt": "2026-01-18T10:00:00.000Z"
+    "createdAt": "2026-01-18T09:30:00.000Z",
+    "updatedAt": "2026-01-18T09:30:00.000Z"
   },
   {
     "id": "5",
-    "title": "Calendar Integration",
-    "description": "<p>Add FullCalendar to display tasks by deadline with color coding based on status.</p>",
-    "deadline": "2026-02-05T00:00:00.000Z",
+    "title": "PingPoll Real-time Polls",
+    "description": "<p>Create live polling system.</p><ul><li>Socket.io real-time updates</li><li>Vote analytics charts</li><li>Shareable poll links</li><li>Results export (CSV/PDF)</li></ul>",
+    "deadline": "2026-02-15T00:00:00.000Z",
     "status": "Pending",
-    "createdAt": "2026-01-19T12:00:00.000Z",
-    "updatedAt": "2026-01-19T12:00:00.000Z"
+    "createdAt": "2026-01-20T13:00:00.000Z",
+    "updatedAt": "2026-01-20T13:00:00.000Z"
   }
 ]
