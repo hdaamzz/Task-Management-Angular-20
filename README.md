@@ -29,7 +29,7 @@ An Angular 20 task management application with MobX state management, rich text 
 - **FullCalendar** - Calendar integration
 - **TypeScript** - Type safety
 - **RxJS** - Reactive programming
-- **CSS3** - Modern styling
+- **TailWind CSS** - Modern styling
 
 ## 📦 Installation
 
@@ -41,7 +41,7 @@ An Angular 20 task management application with MobX state management, rich text 
 
 1. **Clone the repository**
 ```bash
-git clone <https://github.com/hdaamzz/Task-Management-Angular-20>
+git clone https://github.com/hdaamzz/Task-Management-Angular-20
 ```
 
 2. **Install dependencies**
@@ -56,27 +56,6 @@ ng serve
 
 4. **Open the application**
 Navigate to `http://localhost:4200/`
-
-## 📁 Project Structure
-
-```
-src/app/
-├── core/
-│   ├── models/          # Data models (Task, Comment)
-│   └── services/        # Services (TaskService)
-├── stores/              # MobX stores (TaskStore, CommentStore)
-├── features/
-│   ├── task-list/       # Task list component
-│   ├── task-details/    # Task details component
-│   └── calendar-view/   # Calendar component
-├── shared/
-│   └── components/
-│       ├── task-form/   # Task creation/edit form
-│       └── comment-thread/  # Multi-level comments
-├── app.component.ts     # Root component
-├── app.routes.ts        # Routing configuration
-└── app.config.ts        # App configuration
-```
 
 ## 🎯 Usage
 
@@ -106,53 +85,12 @@ src/app/
 3. Comments support unlimited nesting levels
 4. Delete comments using the trash icon
 
-## 🔧 Configuration
-
-### TypeScript Configuration
-The project uses TypeScript with experimental decorators enabled for MobX:
-
-{
-  "compilerOptions": {
-    "experimentalDecorators": true,
-    "useDefineForClassFields": false
-  }
-}
-
 ### Data Source
 Tasks are loaded from `src/assets/tasks.json`. You can modify this file to add initial tasks.
-
-## 📝 Best Practices Implemented
-
-1. **Standalone Components** - Following Angular 20 best practices
-2. **MobX State Management** - Centralized reactive state
-3. **Lazy Loading** - Components loaded on demand
-4. **Separation of Concerns** - Clear separation between services, stores, and components
-5. **Type Safety** - Full TypeScript type coverage
-6. **Reactive Forms** - For form handling and validation
-7. **Clean Code** - Well-organized and maintainable codebase
-
-## 🚀 Build for Production
-
-```bash
-ng build --configuration production
-```
-
-The build artifacts will be stored in the `dist/` directory.
-
-## 📱 Responsive Design
-
-The application is fully responsive and works on:
-- Desktop (1200px+)
-- Tablet (768px - 1199px)
-- Mobile (< 768px)
 
 ## 🤝 Contributing
 
 This is a technical assignment project. Feel free to fork and modify as needed.
-
-## 📄 License
-
-MIT License - Feel free to use this project for learning purposes.
 
 ## 👨‍💻 Author
 
