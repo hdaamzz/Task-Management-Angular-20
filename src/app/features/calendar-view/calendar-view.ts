@@ -43,21 +43,21 @@ export class CalendarView implements OnInit, OnDestroy {
     dayCellClassNames: 'hover:bg-gray-50',
   });
 
-  private readonly destroy$ = new Subject<void>();
-  private disposeReaction: IReactionDisposer | null = null;
+  private readonly _destroy$ = new Subject<void>();
+  private _disposeReaction: IReactionDisposer | null = null;
 
-  private readonly STATUS_COLORS: Record<TaskStatus, string> = {
+  private readonly _STATUS_COLORS: Record<TaskStatus, string> = {
     [TaskStatus.COMPLETED]: '#27ae60',    // Green
     [TaskStatus.IN_PROGRESS]: '#f39c12',  // Orange
     [TaskStatus.PENDING]: '#e74c3c'       // Red
   };
 
-  private readonly MAX_DESCRIPTION_LENGTH = 100;
+  private readonly _MAX_DESCRIPTION_LENGTH = 100;
 
   constructor(
     public readonly taskStore: TaskStore,
-    private readonly taskService: TaskService,
-    private readonly router: Router
+    private readonly _taskService: TaskService,
+    private readonly _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -66,16 +66,16 @@ export class CalendarView implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.disposeReaction) {
-      this.disposeReaction();
+    if (this._disposeReaction) {
+      this._disposeReaction();
     }
 
-    this.destroy$.next();
-    this.destroy$.complete();
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   private setupReactiveUpdates(): void {
-    this.disposeReaction = reaction(
+    this._disposeReaction = reaction(
       () => this.taskStore.tasks.slice(),
       (tasks) => {
         console.log('Tasks changed, updating calendar', tasks.length);
@@ -97,9 +97,9 @@ export class CalendarView implements OnInit, OnDestroy {
     this.taskStore.setLoading(true);
     this.taskStore.setError(null);
 
-    this.taskService
+    this._taskService
       .loadTasks()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this._destroy$))
       .subscribe({
         next: (tasks) => {
           console.log('Tasks loaded successfully:', tasks.length);
@@ -147,7 +147,7 @@ export class CalendarView implements OnInit, OnDestroy {
   }
 
   private getEventColor(status: TaskStatus): string {
-    return this.STATUS_COLORS[status] || '#95a5a6'; 
+    return this._STATUS_COLORS[status] || '#95a5a6'; 
   }
 
   private truncateHtml(html: string): string {
@@ -155,15 +155,15 @@ export class CalendarView implements OnInit, OnDestroy {
     div.innerHTML = html;
     const text = div.textContent || div.innerText || '';
 
-    if (text.length <= this.MAX_DESCRIPTION_LENGTH) {
+    if (text.length <= this._MAX_DESCRIPTION_LENGTH) {
       return text;
     }
 
-    return text.substring(0, this.MAX_DESCRIPTION_LENGTH).trim() + '...';
+    return text.substring(0, this._MAX_DESCRIPTION_LENGTH).trim() + '...';
   }
 
   private navigateTo(path: string[]): void {
-    this.router.navigate(path).catch(error => {
+    this._router.navigate(path).catch(error => {
       console.error('Navigation error:', error);
     });
   }

@@ -25,14 +25,14 @@ export class CommentThread implements OnDestroy {
   commentToDelete: string | null = null;
   expandedReplies: Set<string> = new Set();
 
-  private readonly MAX_NESTING_LEVEL = 5;
-  private readonly destroy$ = new Subject<void>();
+  private readonly _MAX_NESTING_LEVEL = 5;
+  private readonly _destroy$ = new Subject<void>();
 
-  constructor(private readonly commentStore: CommentStore) { }
+  constructor(private readonly _commentStore: CommentStore) { }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   addTopLevelComment(): void {
@@ -49,7 +49,7 @@ export class CommentThread implements OnDestroy {
     }
 
     try {
-      this.commentStore.addComment(
+      this._commentStore.addComment(
         this.taskId,
         trimmedText,
         this.authorName,
@@ -99,7 +99,7 @@ export class CommentThread implements OnDestroy {
     }
 
     try {
-      this.commentStore.addComment(
+      this._commentStore.addComment(
         this.taskId,
         trimmedText,
         this.authorName,
@@ -136,7 +136,7 @@ export class CommentThread implements OnDestroy {
     if (!this.commentToDelete) return;
 
     try {
-      const success = this.commentStore.deleteComment(this.commentToDelete);
+      const success = this._commentStore.deleteComment(this.commentToDelete);
 
       if (success) {
         console.log('Comment deleted:', this.commentToDelete);
@@ -157,7 +157,6 @@ export class CommentThread implements OnDestroy {
     }
   }
 
-  // Check if replies are expanded
   isExpanded(commentId: string): boolean {
     return this.expandedReplies.has(commentId);
   }
@@ -195,12 +194,12 @@ export class CommentThread implements OnDestroy {
   }
 
   getIndentClass(): string {
-    const level = Math.min(this.level, this.MAX_NESTING_LEVEL);
+    const level = Math.min(this.level, this._MAX_NESTING_LEVEL);
     return `indent-level-${level}`;
   }
 
   get isMaxNestingReached(): boolean {
-    return this.level >= this.MAX_NESTING_LEVEL;
+    return this.level >= this._MAX_NESTING_LEVEL;
   }
 
   getTotalCommentCount(comments: Comment[]): number {

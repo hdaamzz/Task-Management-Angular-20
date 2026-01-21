@@ -39,7 +39,7 @@ export class CommentStore {
 
     runInAction(() => {
       if (parentId) {
-        this.addReplyToComment(parentId, newComment);
+        this._addReplyToComment(parentId, newComment);
       } else {
         this.comments = [...this.comments, newComment];
       }
@@ -48,7 +48,7 @@ export class CommentStore {
     return newComment;
   }
 
-  private addReplyToComment(parentId: string, reply: Comment): boolean {
+  private _addReplyToComment(parentId: string, reply: Comment): boolean {
     const addReply = (comments: Comment[]): boolean => {
       for (const comment of comments) {
         if (comment.id === parentId) {

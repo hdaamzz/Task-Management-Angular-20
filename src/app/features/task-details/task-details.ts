@@ -23,20 +23,20 @@ export class TaskDetails implements OnInit, OnDestroy {
   showDeleteModal: boolean = false;
 
   
-  private disposeReaction: IReactionDisposer | null = null;
-  private readonly destroy$ = new Subject<void>();
+  private _disposeReaction: IReactionDisposer | null = null;
+  private readonly _destroy$ = new Subject<void>();
   
 
   constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
+    private readonly _route: ActivatedRoute,
+    private readonly _router: Router,
     public readonly taskStore: TaskStore,
     public readonly commentStore: CommentStore
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap
-      .pipe(takeUntil(this.destroy$))
+    this._route.paramMap
+      .pipe(takeUntil(this._destroy$))
       .subscribe(params => {
         this.taskId = params.get('id') || '';
         if (this.taskId) {
@@ -49,16 +49,16 @@ export class TaskDetails implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.disposeReaction) {
-      this.disposeReaction();
+    if (this._disposeReaction) {
+      this._disposeReaction();
     }
     
-    this.destroy$.next();
-    this.destroy$.complete();
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   private setupReaction(): void {
-    this.disposeReaction = reaction(
+    this._disposeReaction = reaction(
       () => this.taskStore.tasks.find(t => t.id === this.taskId),
       (foundTask) => {
         this.task = foundTask || null;
@@ -83,7 +83,7 @@ export class TaskDetails implements OnInit, OnDestroy {
   }
 
   private navigateToTaskList(): void {
-    this.router.navigate(['/tasks']);
+    this._router.navigate(['/tasks']);
   }
 
   deleteTask(): void {
@@ -91,7 +91,7 @@ export class TaskDetails implements OnInit, OnDestroy {
   }
 
   navigateToCalendar(): void {
-    this.router.navigate(['/calendar']);
+    this._router.navigate(['/calendar']);
   }
   openDeleteModal(): void {
     this.showDeleteModal = true;

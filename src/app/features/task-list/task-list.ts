@@ -21,12 +21,12 @@ export class TaskList implements OnInit {
   taskToDelete: Task | null = null;
   
   readonly TaskStatus = TaskStatus;
-  private readonly destroy$ = new Subject<void>();
+  private readonly _destroy$ = new Subject<void>();
 
   constructor(
     public readonly taskStore: TaskStore,
-    private readonly taskService: TaskService,
-    private readonly router: Router
+    private readonly _taskService: TaskService,
+    private readonly _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -34,17 +34,17 @@ export class TaskList implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   loadTasks(): void {
     this.taskStore.setLoading(true);
     this.taskStore.setError(null);
 
-    this.taskService
+    this._taskService
       .loadTasks()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this._destroy$))
       .subscribe({
         next: (tasks) => {
           this.taskStore.setTasks(tasks);
@@ -74,7 +74,7 @@ export class TaskList implements OnInit {
   }
 
   navigateToCalendar(): void {
-    this.router.navigate(['/calendar']);
+    this._router.navigate(['/calendar']);
   }
 
 

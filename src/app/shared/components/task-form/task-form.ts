@@ -29,18 +29,18 @@ export class TaskForm implements OnInit, OnDestroy {
   };
   readonly minDate: string;
   readonly maxDate: string;
-  private readonly destroy$ = new Subject<void>();
+  private readonly _destroy$ = new Subject<void>();
 
   constructor(
-    private readonly fb: FormBuilder,
-    private readonly taskStore: TaskStore
+    private readonly _fb: FormBuilder,
+    private readonly _taskStore: TaskStore
   ) {
     const today = new Date();
-    this.minDate = this.formatDateForInput(today);
+    this.minDate = this._formatDateForInput(today);
     
     const maxDate = new Date();
     maxDate.setFullYear(maxDate.getFullYear() + 1);
-    this.maxDate = this.formatDateForInput(maxDate);
+    this.maxDate = this._formatDateForInput(maxDate);
   }
 
   ngOnInit(): void {
@@ -49,12 +49,12 @@ export class TaskForm implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   private initForm(): void {
-    this.taskForm = this.fb.group({
+    this.taskForm = this._fb.group({
       title: [
         this.task?.title || '', 
         [
@@ -71,7 +71,7 @@ export class TaskForm implements OnInit, OnDestroy {
         ]
       ],
       deadline: [
-        this.task?.deadline ? this.formatDateForInput(this.task.deadline) : '',
+        this.task?.deadline ? this._formatDateForInput(this.task.deadline) : '',
         [
           Validators.required,
           CustomValidators.futureDate() 
@@ -88,14 +88,14 @@ export class TaskForm implements OnInit, OnDestroy {
 
   private setupFormListeners(): void {
     this.taskForm.valueChanges
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this._destroy$))
       .subscribe(values => {
         console.log('Form values changed:', values);
       });
   }
 
   onSubmit(): void {
-    this.markFormGroupTouched(this.taskForm);
+    this._markFormGroupTouched(this.taskForm);
 
     if (this.taskForm.invalid) {
       console.warn('Form is invalid', this.taskForm.errors);
@@ -109,7 +109,7 @@ export class TaskForm implements OnInit, OnDestroy {
 
     try {
       if (this.task) {
-        const success = this.taskStore.updateTask(this.task.id, formData);
+        const success = this._taskStore.updateTask(this.task.id, formData);
         if (success) {
           console.log('Task updated successfully');
           this.formSubmit.emit();
@@ -118,7 +118,7 @@ export class TaskForm implements OnInit, OnDestroy {
           alert('Failed to update task. Please try again.');
         }
       } else {
-        const newTask = this.taskStore.addTask(formData);
+        const newTask = this._taskStore.addTask(formData);
         console.log('Task created successfully', newTask);
         this.formSubmit.emit();
       }
@@ -139,7 +139,7 @@ export class TaskForm implements OnInit, OnDestroy {
     this.formCancel.emit();
   }
 
-  private formatDateForInput(date: Date): string {
+  private _formatDateForInput(date: Date): string {
     const d = new Date(date);
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
@@ -147,13 +147,13 @@ export class TaskForm implements OnInit, OnDestroy {
     return `${year}-${month}-${day}`;
   }
 
-  private markFormGroupTouched(formGroup: FormGroup): void {
+  private _markFormGroupTouched(formGroup: FormGroup): void {
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
       control?.markAsTouched();
 
       if (control instanceof FormGroup) {
-        this.markFormGroupTouched(control);
+        this._markFormGroupTouched(control);
       }
     });
   }
@@ -193,17 +193,17 @@ export class TaskForm implements OnInit, OnDestroy {
     const errors = control.errors;
 
     if (errors['required']) {
-      return `${this.getFieldLabel(fieldName)} is required`;
+      return `${this._getFieldLabel(fieldName)} is required`;
     }
 
     if (errors['minlength']) {
       const minLength = errors['minlength'].requiredLength;
-      return `${this.getFieldLabel(fieldName)} must be at least ${minLength} characters`;
+      return `${this._getFieldLabel(fieldName)} must be at least ${minLength} characters`;
     }
 
     if (errors['maxlength']) {
       const maxLength = errors['maxlength'].requiredLength;
-      return `${this.getFieldLabel(fieldName)} must not exceed ${maxLength} characters`;
+      return `${this._getFieldLabel(fieldName)} must not exceed ${maxLength} characters`;
     }
 
     if (errors['futureDate']) {
@@ -218,7 +218,7 @@ export class TaskForm implements OnInit, OnDestroy {
     return 'Invalid value';
   }
 
-  private getFieldLabel(fieldName: string): string {
+  private _getFieldLabel(fieldName: string): string {
     const labels: Record<string, string> = {
       'title': 'Title',
       'description': 'Description',
