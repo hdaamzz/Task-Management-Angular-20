@@ -83,34 +83,6 @@ export class CommentStore {
     return true;
   }
 
-  updateComment(commentId: string, newContent: string): boolean {
-    const updateInList = (comments: Comment[]): Comment[] => {
-      return comments.map(comment => {
-        if (comment.id === commentId) {
-          return { ...comment, content: newContent.trim() };
-        }
-        
-        if (comment.replies.length > 0) {
-          return { ...comment, replies: updateInList(comment.replies) };
-        }
-        
-        return comment;
-      });
-    };
-
-    runInAction(() => {
-      this.comments = updateInList(this.comments);
-    });
-
-    return true;
-  }
-
-  clearCommentsForTask(taskId: string) {
-    runInAction(() => {
-      this.comments = this.comments.filter(c => c.taskId !== taskId);
-    });
-  }
-
   getCommentsByTaskId(taskId: string): Comment[] {
     return this.comments.filter(c => 
       c.taskId === taskId && c.parentId === null
@@ -127,16 +99,5 @@ export class CommentStore {
     return this.comments
       .filter(c => c.taskId === taskId)
       .reduce((sum, comment) => sum + countReplies(comment), 0);
-  }
-
-  get allComments(): Comment[] {
-    const flatten = (comments: Comment[]): Comment[] => {
-      return comments.flatMap(comment => [
-        comment,
-        ...flatten(comment.replies)
-      ]);
-    };
-
-    return flatten(this.comments);
   }
 }

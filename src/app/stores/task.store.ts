@@ -114,27 +114,5 @@ export class TaskStore {
   get completedTasks(): Task[] {
     return this.tasks.filter(t => t.status === TaskStatus.COMPLETED);
   }
-
-  get taskCount(): number {
-    return this.tasks.length;
-  }
-
-  get tasksByDeadline(): Task[] {
-    return [...this.tasks].sort((a, b) => 
-      new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-    );
-  }
-
-  get recentTasks(): Task[] {
-    return [...this.tasks].sort((a, b) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-  }
-  get overdueTasks(): Task[] {
-    const now = new Date();
-    return this.tasks.filter(t => 
-      new Date(t.deadline) < now && t.status !== TaskStatus.COMPLETED
-    );
-  }
 }
 
