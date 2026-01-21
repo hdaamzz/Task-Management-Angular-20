@@ -2,38 +2,36 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { reaction } from 'mobx';
-import { QuillModule } from 'ngx-quill';
 import { Task, TaskStatus } from '../../core/models/task.model';
 import { CommentStore } from '../../stores/comment.store';
 import { TaskStore } from '../../stores/task.store';
 import { CommentThread } from '../../shared/components/comment-thread/comment-thread';
 import { FormsModule } from '@angular/forms';
+import { FormatDatePipe } from "../../shared/pipes/format-date-pipe";
+import { FormatDateTimePipe } from "../../shared/pipes/format-date-time-pipe";
 
 @Component({
   selector: 'app-task-details',
-  imports: [CommonModule,FormsModule, RouterLink, QuillModule, CommentThread],
+  imports: [CommonModule, FormsModule, RouterLink, CommentThread, FormatDatePipe, FormatDateTimePipe],
   templateUrl: './task-details.html',
   styleUrl: './task-details.css',
 })
 export class TaskDetails implements OnInit, OnDestroy {
   task: Task | null = null;
   taskId: string = '';
-  TaskStatus = TaskStatus;
   private disposeReaction: (() => void) | null = null;
 
-  quillModules = {
-    toolbar: false 
-  };
+
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    private _route: ActivatedRoute,
+    private _router: Router,
     public taskStore: TaskStore,
     public commentStore: CommentStore
   ) { }
 
   ngOnInit() {
-    this.taskId = this.route.snapshot.paramMap.get('id') || '';
+    this.taskId = this._route.snapshot.paramMap.get('id') || '';
     this.loadTask();
 
     this.disposeReaction = reaction(
@@ -56,46 +54,16 @@ export class TaskDetails implements OnInit, OnDestroy {
       this.task = foundTask;
       this.taskStore.setSelectedTask(foundTask);
     } else {
-      this.router.navigate(['/tasks']);
+      this._router.navigate(['/tasks']);
     }
   }
 
-  getStatusClass(status: TaskStatus): string {
-    switch (status) {
-      case TaskStatus.COMPLETED:
-        return 'status-completed';
-      case TaskStatus.IN_PROGRESS:
-        return 'status-in-progress';
-      case TaskStatus.PENDING:
-        return 'status-pending';
-      default:
-        return '';
-    }
-  }
 
-  formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  }
-
-  formatDateTime(date: Date): string {
-    return new Date(date).toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  }
 
   deleteTask() {
     if (this.task && confirm(`Are you sure you want to delete "${this.task.title}"?`)) {
       this.taskStore.deleteTask(this.task.id);
-      this.router.navigate(['/tasks']);
+      this._router.navigate(['/tasks']);
     }
   }
 
@@ -103,11 +71,14 @@ export class TaskDetails implements OnInit, OnDestroy {
     return this.commentStore.getCommentsByTaskId(this.taskId);
   }
   getStatusLabel(status: TaskStatus): string {
-  switch (status) {
-    case TaskStatus.COMPLETED: return 'COMPLETED';
-    case TaskStatus.IN_PROGRESS: return 'IN_PROGRESS';
-    case TaskStatus.PENDING: return 'PENDING';
-    default: return 'UNKNOWN';
+    switch (status) {
+      case TaskStatus.COMPLETED: return 'COMPLETED';
+      case TaskStatus.IN_PROGRESS: return 'IN_PROGRESS';
+      case TaskStatus.PENDING: return 'PENDING';
+      default: return 'UNKNOWN';
+    }
   }
-}
+  openCalendar() {
+    this._router.navigate(['/calendar']);
+  }
 }

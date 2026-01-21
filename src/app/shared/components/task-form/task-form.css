@@ -1,8 +1,7 @@
-/* Quill Glassmorphic Theme */
 ::ng-deep .quill-glassmorphic .ql-toolbar {
   border: none !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  background: rgba(255, 255, 255, 0.6);
   padding: 0.75rem;
 }
 
@@ -13,83 +12,44 @@
 }
 
 ::ng-deep .quill-glassmorphic .ql-editor {
-  color: #d1d5db;
+  color: #374151;
   min-height: 200px;
   padding: 1rem;
+  background: rgba(255, 255, 255, 0.8);
 }
 
 ::ng-deep .quill-glassmorphic .ql-editor.ql-blank::before {
-  color: rgba(156, 163, 175, 0.6);
+  color: rgba(107, 114, 128, 0.6);
   font-style: normal;
 }
 
-/* Toolbar buttons */
 ::ng-deep .quill-glassmorphic .ql-toolbar button {
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: rgba(0, 0, 0, 0.6) !important;
   transition: all 0.2s;
 }
 
 ::ng-deep .quill-glassmorphic .ql-toolbar button:hover {
-  color: #5C8374 !important;
-  background: rgba(92, 131, 116, 0.1) !important;
+  color: #19A7CE !important;
+  background: rgba(25, 167, 206, 0.1) !important;
   border-radius: 0.25rem;
 }
 
 ::ng-deep .quill-glassmorphic .ql-toolbar button.ql-active {
-  color: #5C8374 !important;
-  background: rgba(92, 131, 116, 0.2) !important;
+  color: #19A7CE !important;
+  background: rgba(25, 167, 206, 0.2) !important;
   border-radius: 0.25rem;
 }
 
-/* Toolbar stroke icons */
 ::ng-deep .quill-glassmorphic .ql-toolbar .ql-stroke {
-  stroke: rgba(255, 255, 255, 0.7) !important;
+  stroke: rgba(0, 0, 0, 0.6) !important;
 }
 
 ::ng-deep .quill-glassmorphic .ql-toolbar button:hover .ql-stroke,
 ::ng-deep .quill-glassmorphic .ql-toolbar button.ql-active .ql-stroke {
-  stroke: #5C8374 !important;
+  stroke: #19A7CE !important;
 }
 
-/* Toolbar fill icons */
-::ng-deep .quill-glassmorphic .ql-toolbar .ql-fill {
-  fill: rgba(255, 255, 255, 0.7) !important;
-}
-
-::ng-deep .quill-glassmorphic .ql-toolbar button:hover .ql-fill,
-::ng-deep .quill-glassmorphic .ql-toolbar button.ql-active .ql-fill {
-  fill: #5C8374 !important;
-}
-
-/* Dropdowns */
-::ng-deep .quill-glassmorphic .ql-toolbar .ql-picker-label {
-  color: rgba(255, 255, 255, 0.7) !important;
-}
-
-::ng-deep .quill-glassmorphic .ql-toolbar .ql-picker-label:hover {
-  color: #5C8374 !important;
-}
-
-::ng-deep .quill-glassmorphic .ql-toolbar .ql-picker-options {
-  background: rgba(10, 31, 35, 0.95);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-}
-
-::ng-deep .quill-glassmorphic .ql-toolbar .ql-picker-item {
-  color: #d1d5db !important;
-}
-
-::ng-deep .quill-glassmorphic .ql-toolbar .ql-picker-item:hover {
-  color: #5C8374 !important;
-  background: rgba(92, 131, 116, 0.1);
-  border-radius: 0.25rem;
-}
-
-/* Date input styling for dark mode */
 input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
+  filter: invert(0);
   cursor: pointer;
 }

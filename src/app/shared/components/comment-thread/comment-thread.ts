@@ -21,11 +21,11 @@ export class CommentThread {
   replyingTo: string | null = null;
   replyText: { [key: string]: string } = {};
 
-  constructor(private commentStore: CommentStore) {}
+  constructor(private _commentStore: CommentStore) {}
 
   addTopLevelComment() {
     if (this.newCommentText.trim()) {
-      this.commentStore.addComment(
+      this._commentStore.addComment(
         this.taskId,
         this.newCommentText.trim(),
         this.authorName,
@@ -53,7 +53,7 @@ export class CommentThread {
   addReply(parentId: string) {
     const text = this.replyText[parentId];
     if (text && text.trim()) {
-      this.commentStore.addComment(
+      this._commentStore.addComment(
         this.taskId,
         text.trim(),
         this.authorName,
@@ -66,7 +66,7 @@ export class CommentThread {
 
   deleteComment(commentId: string) {
     if (confirm('Are you sure you want to delete this comment and all its replies?')) {
-      this.commentStore.deleteComment(commentId);
+      this._commentStore.deleteComment(commentId);
     }
   }
 

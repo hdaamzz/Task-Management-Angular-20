@@ -16,7 +16,7 @@ import { TaskStore } from '../../stores/task.store';
   templateUrl: './calendar-view.html',
   styleUrl: './calendar-view.css',
 })
-export class CalendarView  implements OnInit {
+export class CalendarView implements OnInit {
   calendarOptions = signal<CalendarOptions>({
     plugins: [dayGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
@@ -40,9 +40,9 @@ export class CalendarView  implements OnInit {
 
   constructor(
     public taskStore: TaskStore,
-    private taskService: TaskService,
-    private router: Router
-  ) {}
+    private _taskService: TaskService,
+    private _router: Router
+  ) { }
 
   ngOnInit() {
     this.loadTasks();
@@ -58,7 +58,7 @@ export class CalendarView  implements OnInit {
   loadTasks() {
     if (this.taskStore.tasks.length === 0) {
       this.taskStore.setLoading(true);
-      this.taskService.loadTasks().subscribe({
+      this._taskService.loadTasks().subscribe({
         next: (tasks) => {
           this.taskStore.setTasks(tasks);
           this.taskStore.setLoading(false);
@@ -100,9 +100,9 @@ export class CalendarView  implements OnInit {
       case TaskStatus.COMPLETED:
         return '#27ae60';
       case TaskStatus.IN_PROGRESS:
-        return '#f39c12'; 
+        return '#f39c12';
       case TaskStatus.PENDING:
-        return '#e74c3c'; 
+        return '#e74c3c';
       default:
         return '#95a5a6';
     }
@@ -117,6 +117,13 @@ export class CalendarView  implements OnInit {
 
   handleEventClick(clickInfo: EventClickArg) {
     const taskId = clickInfo.event.id;
-    this.router.navigate(['/tasks', taskId]);
+    this._router.navigate(['/tasks', taskId]);
+  }
+  goToHome() {
+    this._router.navigate(['/']);
+  }
+
+  goToTasks() {
+    this._router.navigate(['/tasks']);
   }
 }

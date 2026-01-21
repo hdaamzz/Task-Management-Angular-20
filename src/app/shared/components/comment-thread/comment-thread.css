@@ -2,7 +2,6 @@
   width: 100%;
 }
 
-/* Indentation for nested comments */
 .indent-level-0 { margin-left: 0; }
 .indent-level-1 { margin-left: 2rem; }
 .indent-level-2 { margin-left: 4rem; }

@@ -28,8 +28,8 @@ export class TaskForm implements OnInit {
   };
 
   constructor(
-    private fb: FormBuilder,
-    private taskStore: TaskStore
+    private _fb: FormBuilder,
+    private _taskStore: TaskStore
   ) { }
 
   ngOnInit() {
@@ -37,7 +37,7 @@ export class TaskForm implements OnInit {
   }
 
   initForm() {
-    this.taskForm = this.fb.group({
+    this.taskForm = this._fb.group({
       title: [this.task?.title || '', [Validators.required, Validators.minLength(3)]],
       description: [this.task?.description || '', Validators.required],
       deadline: [
@@ -61,9 +61,9 @@ export class TaskForm implements OnInit {
       };
 
       if (this.task) {
-        this.taskStore.updateTask(this.task.id, formData);
+        this._taskStore.updateTask(this.task.id, formData);
       } else {
-        this.taskStore.addTask(formData);
+        this._taskStore.addTask(formData);
       }
 
       this.formSubmit.emit();

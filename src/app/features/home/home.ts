@@ -13,4 +13,7 @@ export class Home {
   navigateToApp() {
     this._router.navigate(['/tasks']);
   }
+  navigateToCalender() {
+    this._router.navigate(['/calendar']);
+  }
 }

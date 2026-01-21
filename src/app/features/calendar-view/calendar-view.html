@@ -1,88 +1,126 @@
-<div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-[#040D12] via-[#0a1f23] to-[#1a2a2e] relative overflow-hidden">
+<div
+  class="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-white via-[#E6F4FF] to-[#19A7CE] relative overflow-hidden">
   <!-- Animated Background Blobs -->
-  <div class="absolute top-20 left-10 w-72 h-72 bg-[#5C8374]/20 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-  <div class="absolute top-40 right-10 w-72 h-72 bg-[#93B1A6]/20 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-  <div class="absolute -bottom-8 left-20 w-72 h-72 bg-[#183D3D]/20 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+  <div
+    class="absolute top-20 left-10 w-72 h-72 bg-[#19A7CE]/20 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob">
+  </div>
+  <div
+    class="absolute top-40 right-10 w-72 h-72 bg-[#B3E5FC]/20 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000">
+  </div>
+  <div
+    class="absolute -bottom-8 left-20 w-72 h-72 bg-[#19A7CE]/10 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000">
+  </div>
 
   <!-- Navigation -->
   <nav class="relative z-10 px-6 py-6 lg:px-12 mb-12">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <svg class="w-10 h-10 text-[#5C8374]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-10 h-10 text-[#19A7CE]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
         </svg>
-        <span class="text-2xl font-bold text-white">TaskFlow</span>
+        <span class="text-2xl font-bold text-gray-900">TaskFlow</span>
       </div>
-      <a routerLink="/tasks" class="group p-3 hover:bg-white/10 rounded-xl transition-all duration-300 hover:scale-110 backdrop-blur-sm">
-        <svg class="w-6 h-6 text-gray-400 group-hover:text-[#5C8374]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-        </svg>
-      </a>
+      <div class="flex items-center space-x-3">
+        <!-- Tasks Button -->
+        <button (click)="goToTasks()"
+          class="group p-4 hover:bg-gray-100 rounded-xl transition-all duration-300 hover:scale-110 backdrop-blur-sm"
+          title="Tasks">
+          <svg class="w-6 h-6 text-gray-600 group-hover:text-[#19A7CE]" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+        </button>
+        <!-- Home Icon -->
+        <button (click)="goToHome()"
+          class="group p-4 hover:bg-gray-100 rounded-xl transition-all duration-300 hover:scale-110 backdrop-blur-sm"
+          title="Home">
+          <svg class="w-6 h-6 text-gray-600 group-hover:text-[#19A7CE]" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+        </button>
+      </div>
+
     </div>
   </nav>
 
   <!-- Main Content -->
   <div class="relative z-10 px-6 lg:px-12">
     <div class="max-w-7xl mx-auto">
-      
+
       <!-- Header -->
-      <div class="backdrop-blur-xl bg-white/8 rounded-2xl border border-white/20 p-6 sm:p-8 mb-8">
+      <div class="bg-white/90 backdrop-blur-md rounded-2xl border border-gray-200/50 p-6 sm:p-8 mb-8 shadow-xl">
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <!-- Title -->
           <div class="flex items-center gap-4">
-            <div class="w-14 h-14 bg-linear-to-br from-[#5C8374] to-[#93B1A6] rounded-2xl p-3.5 flex items-center justify-center shadow-xl">
+            <div
+              class="w-14 h-14 bg-linear-to-br from-[#19A7CE] to-[#1488B0] rounded-2xl p-3.5 flex items-center justify-center shadow-xl">
               <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <h2 class="text-3xl sm:text-4xl font-bold text-white">Task Calendar</h2>
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Task Calendar</h2>
           </div>
 
           <!-- Legend -->
-          <div class="flex flex-wrap gap-4">
-            <div class="flex items-center gap-2">
-              <span class="w-5 h-5 bg-red-500/80 rounded-lg"></span>
-              <span class="text-sm font-medium text-gray-300">Pending</span>
+          <div class="flex flex-wrap gap-6">
+            <div class="flex items-center gap-3 p-3 bg-red-50/80 backdrop-blur-sm rounded-xl border border-red-200/50">
+              <span class="w-4 h-4 bg-red-500/80 rounded-lg shadow-sm"></span>
+              <span class="text-sm font-semibold text-gray-800">Pending</span>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="w-5 h-5 bg-yellow-500/80 rounded-lg"></span>
-              <span class="text-sm font-medium text-gray-300">In Progress</span>
+            <div
+              class="flex items-center gap-3 p-3 bg-yellow-50/80 backdrop-blur-sm rounded-xl border border-yellow-200/50">
+              <span class="w-4 h-4 bg-yellow-500/80 rounded-lg shadow-sm"></span>
+              <span class="text-sm font-semibold text-gray-800">In Progress</span>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="w-5 h-5 bg-green-500/80 rounded-lg"></span>
-              <span class="text-sm font-medium text-gray-300">Completed</span>
+            <div
+              class="flex items-center gap-3 p-3 bg-green-50/80 backdrop-blur-sm rounded-xl border border-green-200/50">
+              <span class="w-4 h-4 bg-green-500/80 rounded-lg shadow-sm"></span>
+              <span class="text-sm font-semibold text-gray-800">Completed</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Loading State -->
-      <div *ngIf="taskStore.isLoading" class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-12 text-center">
-        <div class="w-16 h-16 border-4 border-[#5C8374] border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
-        <p class="text-xl text-gray-300">Loading calendar...</p>
+      @if (taskStore.isLoading) {
+      <div class="bg-white/90 backdrop-blur-md rounded-2xl border border-gray-200/50 p-12 text-center shadow-xl">
+        <div
+          class="w-16 h-16 border-4 border-[#19A7CE] border-t-transparent rounded-full animate-spin mx-auto mb-6 bg-white/20">
+        </div>
+        <p class="text-xl text-gray-700 font-medium">Loading calendar...</p>
       </div>
+      }
 
       <!-- Error State -->
-      <div *ngIf="taskStore.error" class="bg-red-500/10 backdrop-blur-md rounded-2xl border border-red-500/30 p-8 text-center mb-8">
+      @if (taskStore.error) {
+      <div class="bg-red-50/90 backdrop-blur-md rounded-2xl border border-red-200/50 p-8 text-center mb-8 shadow-xl">
         <svg class="w-16 h-16 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <p class="text-lg text-red-300">{{ taskStore.error }}</p>
+        <p class="text-lg text-red-800 font-medium">{{ taskStore.error }}</p>
       </div>
+      }
 
       <!-- Calendar -->
-      <div *ngIf="!taskStore.isLoading" class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 sm:p-8 mb-8">
+      @if (!taskStore.isLoading) {
+      <div class="bg-white/90 backdrop-blur-md rounded-2xl border border-gray-200/50 p-6 sm:p-8 mb-8 shadow-2xl">
         <full-calendar [options]="calendarOptions()"></full-calendar>
       </div>
+      }
 
-      <!-- Footer Hint -->
-      <div class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 text-center">
-        <div class="flex items-center justify-center gap-3 text-gray-300">
-          <svg class="w-5 h-5 text-[#93B1A6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      <div class="bg-white/90 backdrop-blur-md rounded-2xl border border-gray-200/50 p-6 text-center shadow-xl">
+        <div class="flex items-center justify-center gap-3 text-gray-700">
+          <svg class="w-5 h-5 text-[#19A7CE]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <p class="text-lg italic">Click on any task to view its details</p>
+          <p class="text-lg italic font-medium">Click on any task to view its details</p>
         </div>
       </div>
     </div>

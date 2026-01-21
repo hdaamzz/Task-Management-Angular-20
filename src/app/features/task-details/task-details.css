@@ -1,6 +1,3 @@
-/* Add this to your component.scss or styles.scss */
-
-/* Quill Dark Theme Styling */
 ::ng-deep .quill-dark-theme .ql-container {
   border: none !important;
   font-size: 1.125rem;
@@ -9,77 +6,25 @@
 
 ::ng-deep .quill-dark-theme .ql-editor {
   padding: 0 !important;
-  color: #d1d5db !important; /* gray-300 */
+  color: #374151 !important;
   min-height: auto !important;
+  background: transparent !important;
 }
 
 ::ng-deep .quill-dark-theme .ql-editor p {
   margin-bottom: 1rem;
-  color: #d1d5db;
+  color: #4B5563;
 }
 
 ::ng-deep .quill-dark-theme .ql-editor strong {
-  color: #ffffff;
+  color: #111827;
   font-weight: 600;
 }
 
-::ng-deep .quill-dark-theme .ql-editor em {
-  color: #93B1A6;
+::ng-deep .quill-dark-theme .ql-editor * {
+  line-height: 1.75;
 }
 
-::ng-deep .quill-dark-theme .ql-editor h1,
-::ng-deep .quill-dark-theme .ql-editor h2,
-::ng-deep .quill-dark-theme .ql-editor h3 {
-  color: #ffffff;
-  font-weight: bold;
-  margin-bottom: 0.75rem;
-}
-
-::ng-deep .quill-dark-theme .ql-editor ul,
-::ng-deep .quill-dark-theme .ql-editor ol {
-  color: #d1d5db;
-  padding-left: 1.5rem;
-}
-
-::ng-deep .quill-dark-theme .ql-editor li {
-  margin-bottom: 0.5rem;
-}
-
-::ng-deep .quill-dark-theme .ql-editor a {
-  color: #93B1A6;
-  text-decoration: none;
-}
-
-::ng-deep .quill-dark-theme .ql-editor a:hover {
-  color: #5C8374;
-}
-
-::ng-deep .quill-dark-theme .ql-editor code {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #93B1A6;
-  padding: 0.125rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.875em;
-}
-
-::ng-deep .quill-dark-theme .ql-editor pre {
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
-  padding: 1rem;
-  color: #d1d5db;
-  overflow-x: auto;
-}
-
-::ng-deep .quill-dark-theme .ql-editor blockquote {
-  border-left: 4px solid #5C8374;
-  padding-left: 1rem;
-  color: #d1d5db;
-  font-style: italic;
-  margin: 1rem 0;
-}
-
-/* Hide the toolbar if read-only */
 ::ng-deep .quill-dark-theme .ql-toolbar {
   display: none !important;
 }

@@ -1,14 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TaskForm } from '../../shared/components/task-form/task-form';
 import { Task, TaskStatus } from '../../core/models/task.model';
 import { TaskService } from '../../core/services/task.service';
 import { TaskStore } from '../../stores/task.store';
+import { TruncatePipe } from "../../shared/pipes/truncate-pipe";
+import { FormatDatePipe } from "../../shared/pipes/format-date-pipe";
 
 @Component({
   selector: 'app-task-list',
-  imports: [CommonModule, RouterLink, TaskForm],
+  imports: [CommonModule, RouterLink, TaskForm, TruncatePipe, FormatDatePipe],
   templateUrl: './task-list.html',
   styleUrl: './task-list.css',
 })
@@ -19,7 +21,8 @@ export class TaskList implements OnInit {
 
   constructor(
     public taskStore: TaskStore,
-    private taskService: TaskService
+    private _taskService: TaskService,
+    private _router : Router
   ) { }
 
   ngOnInit() {
@@ -28,7 +31,7 @@ export class TaskList implements OnInit {
 
   loadTasks() {
     this.taskStore.setLoading(true);
-    this.taskService.loadTasks().subscribe({
+    this._taskService.loadTasks().subscribe({
       next: (tasks) => {
         this.taskStore.setTasks(tasks);
         this.taskStore.setLoading(false);
@@ -44,6 +47,9 @@ export class TaskList implements OnInit {
   openAddTaskForm() {
     this.editingTask = null;
     this.showTaskForm = true;
+  }
+  openCalendar() {
+    this._router.navigate(['/calendar']);
   }
 
   openEditTaskForm(task: Task) {
@@ -61,33 +67,5 @@ export class TaskList implements OnInit {
     if (confirm(`Are you sure you want to delete "${task.title}"?`)) {
       this.taskStore.deleteTask(task.id);
     }
-  }
-
-  getStatusClass(status: TaskStatus): string {
-    switch (status) {
-      case TaskStatus.COMPLETED:
-        return 'status-completed';
-      case TaskStatus.IN_PROGRESS:
-        return 'status-in-progress';
-      case TaskStatus.PENDING:
-        return 'status-pending';
-      default:
-        return '';
-    }
-  }
-
-  getShortDescription(html: string): string {
-    const div = document.createElement('div');
-    div.innerHTML = html;
-    const text = div.textContent || div.innerText || '';
-    return text.length > 100 ? text.substring(0, 100) + '...' : text;
-  }
-
-  formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
   }
 }
