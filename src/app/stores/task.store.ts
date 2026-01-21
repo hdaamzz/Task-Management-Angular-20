@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { Task, TaskStatus, TaskFormData } from '../core/models/task.model';
+import { IdGenerator } from '../shared/utils/id-generator.util';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,10 @@ export class TaskStore {
   }
 
   setTasks(tasks: Task[]) {
-    this.tasks = tasks;
+    runInAction(() => {
+      this.tasks = tasks;
+      this.error = null;
+    });
   }
 
   setSelectedTask(task: Task | null) {
@@ -26,40 +30,73 @@ export class TaskStore {
   setLoading(loading: boolean) {
     this.isLoading = loading;
   }
-
   setError(error: string | null) {
     this.error = error;
   }
 
-  addTask(taskData: TaskFormData) {
+  addTask(taskData: TaskFormData): Task {
     const newTask: Task = {
-      id: this.generateId(),
+      id: IdGenerator.generate('task'),
       ...taskData,
       createdAt: new Date(),
       updatedAt: new Date()
     };
-    this.tasks.push(newTask);
+    
+    runInAction(() => {
+      this.tasks = [...this.tasks, newTask];
+    });
+    
+    return newTask;
   }
 
-  updateTask(id: string, taskData: Partial<TaskFormData>) {
+  updateTask(id: string, taskData: Partial<TaskFormData>): boolean {
     const index = this.tasks.findIndex(t => t.id === id);
-    if (index !== -1) {
-      this.tasks[index] = {
-        ...this.tasks[index],
-        ...taskData,
-        updatedAt: new Date()
-      };
+    
+    if (index === -1) {
+      console.warn(`Task with id ${id} not found`);
+      return false;
+    }
+
+    runInAction(() => {
+      this.tasks = this.tasks.map(task => 
+        task.id === id 
+          ? { ...task, ...taskData, updatedAt: new Date() }
+          : task
+      );
+
       if (this.selectedTask?.id === id) {
         this.selectedTask = this.tasks[index];
       }
-    }
+    });
+
+    return true;
   }
 
-  deleteTask(id: string) {
-    this.tasks = this.tasks.filter(t => t.id !== id);
-    if (this.selectedTask?.id === id) {
-      this.selectedTask = null;
+  deleteTask(id: string): boolean {
+    const taskExists = this.tasks.some(t => t.id === id);
+    
+    if (!taskExists) {
+      console.warn(`Task with id ${id} not found`);
+      return false;
     }
+
+    runInAction(() => {
+      this.tasks = this.tasks.filter(t => t.id !== id);
+      
+      if (this.selectedTask?.id === id) {
+        this.selectedTask = null;
+      }
+    });
+
+    return true;
+  }
+
+  clearTasks() {
+    runInAction(() => {
+      this.tasks = [];
+      this.selectedTask = null;
+      this.error = null;
+    });
   }
 
   getTaskById(id: string): Task | undefined {
@@ -78,7 +115,25 @@ export class TaskStore {
     return this.tasks.filter(t => t.status === TaskStatus.COMPLETED);
   }
 
-  private generateId(): string {
-    return `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  get taskCount(): number {
+    return this.tasks.length;
+  }
+
+  get tasksByDeadline(): Task[] {
+    return [...this.tasks].sort((a, b) => 
+      new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+    );
+  }
+
+  get recentTasks(): Task[] {
+    return [...this.tasks].sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  }
+  get overdueTasks(): Task[] {
+    const now = new Date();
+    return this.tasks.filter(t => 
+      new Date(t.deadline) < now && t.status !== TaskStatus.COMPLETED
+    );
   }
 }

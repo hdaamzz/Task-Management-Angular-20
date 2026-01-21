@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { CommentStore } from '../../../stores/comment.store';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Comment } from '../../../core/models/comment.model';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -11,69 +12,133 @@ import { Comment } from '../../../core/models/comment.model';
   templateUrl: './comment-thread.html',
   styleUrl: './comment-thread.css',
 })
-export class CommentThread {
+export class CommentThread implements OnDestroy {
   @Input() comments: Comment[] = [];
   @Input() taskId: string = '';
-  @Input() level: number = 0; 
+  @Input() level: number = 0;
 
   newCommentText: string = '';
   authorName: string = 'Anonymous User';
   replyingTo: string | null = null;
-  replyText: { [key: string]: string } = {};
+  replyText: Record<string, string> = {};
 
-  constructor(private _commentStore: CommentStore) {}
+  private readonly MAX_NESTING_LEVEL = 5;
+  private readonly destroy$ = new Subject<void>();
 
-  addTopLevelComment() {
-    if (this.newCommentText.trim()) {
-      this._commentStore.addComment(
+  constructor(private readonly commentStore: CommentStore) { }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  addTopLevelComment(): void {
+    const trimmedText = this.newCommentText.trim();
+
+    if (!trimmedText) {
+      console.warn('Cannot add empty comment');
+      return;
+    }
+
+    if (trimmedText.length < 3) {
+      alert('Comment must be at least 3 characters');
+      return;
+    }
+
+    try {
+      this.commentStore.addComment(
         this.taskId,
-        this.newCommentText.trim(),
+        trimmedText,
         this.authorName,
         null
       );
+
       this.newCommentText = '';
+      console.log('Top-level comment added');
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      alert('Failed to add comment. Please try again.');
     }
   }
 
-  startReply(commentId: string) {
+  startReply(commentId: string): void {
     this.replyingTo = commentId;
+
     if (!this.replyText[commentId]) {
       this.replyText[commentId] = '';
     }
+
+    setTimeout(() => {
+      const textarea = document.querySelector(`textarea[data-reply-to="${commentId}"]`) as HTMLTextAreaElement;
+      textarea?.focus();
+    }, 100);
   }
 
-  cancelReply() {
+  cancelReply(): void {
     this.replyingTo = null;
   }
-  getPaddingClass(): string {
-    if (this.level === 0) return 'pl-0';
-    return 'pl-4';
-  }
 
-  addReply(parentId: string) {
+  addReply(parentId: string): void {
     const text = this.replyText[parentId];
-    if (text && text.trim()) {
-      this._commentStore.addComment(
+    const trimmedText = text?.trim();
+
+    if (!trimmedText) {
+      console.warn('Cannot add empty reply');
+      return;
+    }
+
+    if (trimmedText.length < 3) {
+      alert('Reply must be at least 3 characters');
+      return;
+    }
+
+    try {
+      this.commentStore.addComment(
         this.taskId,
-        text.trim(),
+        trimmedText,
         this.authorName,
         parentId
       );
+
       this.replyText[parentId] = '';
       this.replyingTo = null;
+      console.log('Reply added to comment:', parentId);
+    } catch (error) {
+      console.error('Error adding reply:', error);
+      alert('Failed to add reply. Please try again.');
     }
   }
 
-  deleteComment(commentId: string) {
-    if (confirm('Are you sure you want to delete this comment and all its replies?')) {
-      this._commentStore.deleteComment(commentId);
+  deleteComment(commentId: string): void {
+    const message = 'Are you sure you want to delete this comment and all its replies?';
+
+    if (!confirm(message)) {
+      return;
+    }
+
+    try {
+      const success = this.commentStore.deleteComment(commentId);
+
+      if (success) {
+        console.log('Comment deleted:', commentId);
+      } else {
+        console.error('Failed to delete comment');
+        alert('Failed to delete comment. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      alert('Failed to delete comment. Please try again.');
     }
   }
+
+  // HELPER METHODS
+  
 
   formatDate(date: Date): string {
     const now = new Date();
     const commentDate = new Date(date);
     const diffMs = now.getTime() - commentDate.getTime();
+
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
@@ -82,7 +147,7 @@ export class CommentThread {
     if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
     if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
     if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-    
+
     return commentDate.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
@@ -90,7 +155,32 @@ export class CommentThread {
     });
   }
 
+  getPaddingClass(): string {
+    if (this.level === 0) return 'pl-0';
+    if (this.level === 1) return 'pl-4';
+    if (this.level === 2) return 'pl-8';
+    if (this.level >= 3) return 'pl-12';
+    return 'pl-0';
+  }
+
   getIndentClass(): string {
-    return `indent-level-${Math.min(this.level, 5)}`;
+    const level = Math.min(this.level, this.MAX_NESTING_LEVEL);
+    return `indent-level-${level}`;
+  }
+
+  get isMaxNestingReached(): boolean {
+    return this.level >= this.MAX_NESTING_LEVEL;
+  }
+
+  getTotalCommentCount(comments: Comment[]): number {
+    let count = comments.length;
+
+    comments.forEach(comment => {
+      if (comment.replies && comment.replies.length > 0) {
+        count += this.getTotalCommentCount(comment.replies);
+      }
+    });
+
+    return count;
   }
 }

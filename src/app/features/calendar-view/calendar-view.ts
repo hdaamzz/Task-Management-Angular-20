@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
+import { CalendarOptions, EventClickArg, EventInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { reaction } from 'mobx';
-import { TaskStatus } from '../../core/models/task.model';
+import { IReactionDisposer, reaction } from 'mobx';
+import { Task, TaskStatus } from '../../core/models/task.model';
 import { TaskService } from '../../core/services/task.service';
 import { TaskStore } from '../../stores/task.store';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-calendar-view',
@@ -16,7 +17,7 @@ import { TaskStore } from '../../stores/task.store';
   templateUrl: './calendar-view.html',
   styleUrl: './calendar-view.css',
 })
-export class CalendarView implements OnInit {
+export class CalendarView implements OnInit, OnDestroy {
   calendarOptions = signal<CalendarOptions>({
     plugins: [dayGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
@@ -31,52 +32,104 @@ export class CalendarView implements OnInit {
     eventDisplay: 'block',
     displayEventTime: false,
     height: 'auto',
+    contentHeight: 'auto',
+    aspectRatio: 1.8,
     eventTimeFormat: {
       hour: '2-digit',
       minute: '2-digit',
       meridiem: false
-    }
+    },
+    eventClassNames: 'cursor-pointer hover:opacity-90 transition-opacity',
+    dayCellClassNames: 'hover:bg-gray-50',
   });
 
+  private readonly destroy$ = new Subject<void>();
+  private disposeReaction: IReactionDisposer | null = null;
+
+  private readonly STATUS_COLORS: Record<TaskStatus, string> = {
+    [TaskStatus.COMPLETED]: '#27ae60',    // Green
+    [TaskStatus.IN_PROGRESS]: '#f39c12',  // Orange
+    [TaskStatus.PENDING]: '#e74c3c'       // Red
+  };
+
+  private readonly MAX_DESCRIPTION_LENGTH = 100;
+
   constructor(
-    public taskStore: TaskStore,
-    private _taskService: TaskService,
-    private _router: Router
-  ) { }
+    public readonly taskStore: TaskStore,
+    private readonly taskService: TaskService,
+    private readonly router: Router
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadTasks();
+    this.setupReactiveUpdates();
+  }
 
-    reaction(
+  ngOnDestroy(): void {
+    if (this.disposeReaction) {
+      this.disposeReaction();
+    }
+
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private setupReactiveUpdates(): void {
+    this.disposeReaction = reaction(
       () => this.taskStore.tasks.slice(),
-      () => {
+      (tasks) => {
+        console.log('Tasks changed, updating calendar', tasks.length);
         this.updateCalendarEvents();
+      },
+      {
+        fireImmediately: false,
+        delay: 100
       }
     );
   }
 
-  loadTasks() {
-    if (this.taskStore.tasks.length === 0) {
-      this.taskStore.setLoading(true);
-      this._taskService.loadTasks().subscribe({
+  private loadTasks(): void {
+    if (this.taskStore.tasks.length > 0) {
+      this.updateCalendarEvents();
+      return;
+    }
+
+    this.taskStore.setLoading(true);
+    this.taskStore.setError(null);
+
+    this.taskService
+      .loadTasks()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
         next: (tasks) => {
+          console.log('Tasks loaded successfully:', tasks.length);
           this.taskStore.setTasks(tasks);
           this.taskStore.setLoading(false);
           this.updateCalendarEvents();
         },
         error: (error) => {
-          this.taskStore.setError('Failed to load tasks');
+          console.error('Error loading tasks for calendar:', error);
+          this.taskStore.setError('Failed to load tasks for calendar');
           this.taskStore.setLoading(false);
-          console.error('Error loading tasks:', error);
         }
       });
-    } else {
-      this.updateCalendarEvents();
-    }
   }
 
-  updateCalendarEvents() {
-    const events = this.taskStore.tasks.map(task => ({
+  private updateCalendarEvents(): void {
+    const events: EventInput[] = this.taskStore.tasks.map(task => 
+      this.transformTaskToEvent(task)
+    );
+
+    console.log('Updating calendar with events:', events.length);
+
+    this.calendarOptions.update(options => ({
+      ...options,
+      events: events
+    }));
+  }
+
+  private transformTaskToEvent(task: Task): EventInput {
+    return {
       id: task.id,
       title: task.title,
       start: task.deadline,
@@ -85,45 +138,69 @@ export class CalendarView implements OnInit {
       textColor: '#ffffff',
       extendedProps: {
         status: task.status,
-        description: this.getShortDescription(task.description)
-      }
-    }));
-
-    this.calendarOptions.update(options => ({
-      ...options,
-      events: events
-    }));
+        description: this.truncateHtml(task.description),
+        taskId: task.id
+      },
+      display: 'block',
+      classNames: ['task-event', `task-${task.status.toLowerCase().replace(' ', '-')}`]
+    };
   }
 
-  getEventColor(status: TaskStatus): string {
-    switch (status) {
-      case TaskStatus.COMPLETED:
-        return '#27ae60';
-      case TaskStatus.IN_PROGRESS:
-        return '#f39c12';
-      case TaskStatus.PENDING:
-        return '#e74c3c';
-      default:
-        return '#95a5a6';
-    }
+  private getEventColor(status: TaskStatus): string {
+    return this.STATUS_COLORS[status] || '#95a5a6'; 
   }
 
-  getShortDescription(html: string): string {
+  private truncateHtml(html: string): string {
     const div = document.createElement('div');
     div.innerHTML = html;
     const text = div.textContent || div.innerText || '';
-    return text.length > 100 ? text.substring(0, 100) + '...' : text;
+
+    if (text.length <= this.MAX_DESCRIPTION_LENGTH) {
+      return text;
+    }
+
+    return text.substring(0, this.MAX_DESCRIPTION_LENGTH).trim() + '...';
   }
 
-  handleEventClick(clickInfo: EventClickArg) {
+  private navigateTo(path: string[]): void {
+    this.router.navigate(path).catch(error => {
+      console.error('Navigation error:', error);
+    });
+  }
+
+  handleEventClick(clickInfo: EventClickArg): void {
     const taskId = clickInfo.event.id;
-    this._router.navigate(['/tasks', taskId]);
-  }
-  goToHome() {
-    this._router.navigate(['/']);
+    
+    if (!taskId) {
+      console.error('Event click without task ID');
+      return;
+    }
+
+    console.log('Calendar event clicked:', taskId);
+    this.navigateTo(['/tasks', taskId]);
   }
 
-  goToTasks() {
-    this._router.navigate(['/tasks']);
+  goToHome(): void {
+    this.navigateTo(['/']);
+  }
+
+  goToTasks(): void {
+    this.navigateTo(['/tasks']);
+  }
+
+  get eventCount(): number {
+    return this.taskStore.tasks.length;
+  }
+
+  get hasEvents(): boolean {
+    return this.taskStore.tasks.length > 0;
+  }
+
+  get taskStatusCounts() {
+    return {
+      pending: this.taskStore.pendingTasks.length,
+      inProgress: this.taskStore.inProgressTasks.length,
+      completed: this.taskStore.completedTasks.length
+    };
   }
 }
