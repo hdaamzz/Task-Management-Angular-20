@@ -21,6 +21,9 @@ export class CommentThread implements OnDestroy {
   authorName: string = 'Anonymous User';
   replyingTo: string | null = null;
   replyText: Record<string, string> = {};
+  showDeleteModal = false;
+  commentToDelete: string | null = null;
+  expandedReplies: Set<string> = new Set();
 
   private readonly MAX_NESTING_LEVEL = 5;
   private readonly destroy$ = new Subject<void>();
@@ -62,17 +65,20 @@ export class CommentThread implements OnDestroy {
   }
 
   startReply(commentId: string): void {
-    this.replyingTo = commentId;
+    if (this.replyingTo !== commentId) {
+      this.replyingTo = commentId;
 
-    if (!this.replyText[commentId]) {
-      this.replyText[commentId] = '';
+      if (!this.replyText[commentId]) {
+        this.replyText[commentId] = '';
+      }
+
+      setTimeout(() => {
+        const textarea = document.querySelector(`textarea[placeholder="Write a reply..."]`) as HTMLTextAreaElement;
+        textarea?.focus();
+      }, 150);
     }
-
-    setTimeout(() => {
-      const textarea = document.querySelector(`textarea[data-reply-to="${commentId}"]`) as HTMLTextAreaElement;
-      textarea?.focus();
-    }, 100);
   }
+
 
   cancelReply(): void {
     this.replyingTo = null;
@@ -110,29 +116,54 @@ export class CommentThread implements OnDestroy {
   }
 
   deleteComment(commentId: string): void {
-    const message = 'Are you sure you want to delete this comment and all its replies?';
+    this.openDeleteModal(commentId);
+  }
+  openDeleteModal(commentId: string): void {
+    this.commentToDelete = commentId;
+    this.showDeleteModal = true;
+    document.body.style.overflow = 'hidden';
+  }
 
-    if (!confirm(message)) {
-      return;
-    }
-
-    try {
-      const success = this.commentStore.deleteComment(commentId);
-
-      if (success) {
-        console.log('Comment deleted:', commentId);
-      } else {
-        console.error('Failed to delete comment');
-        alert('Failed to delete comment. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error deleting comment:', error);
-      alert('Failed to delete comment. Please try again.');
+  closeDeleteModal(event?: MouseEvent): void {
+    if (event?.target === event?.currentTarget) {
+      this.showDeleteModal = false;
+      this.commentToDelete = null;
+      document.body.style.overflow = 'unset';
     }
   }
 
+  confirmDeleteComment(): void {
+    if (!this.commentToDelete) return;
+
+    try {
+      const success = this.commentStore.deleteComment(this.commentToDelete);
+
+      if (success) {
+        console.log('Comment deleted:', this.commentToDelete);
+      } else {
+        console.error('Failed to delete comment');
+      }
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+    }
+
+    this.closeDeleteModal();
+  }
+  toggleReplies(commentId: string): void {
+    if (this.isExpanded(commentId)) {
+      this.expandedReplies.delete(commentId);
+    } else {
+      this.expandedReplies.add(commentId);
+    }
+  }
+
+  // Check if replies are expanded
+  isExpanded(commentId: string): boolean {
+    return this.expandedReplies.has(commentId);
+  }
+
   // HELPER METHODS
-  
+
 
   formatDate(date: Date): string {
     const now = new Date();

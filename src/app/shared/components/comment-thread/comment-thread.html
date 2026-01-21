@@ -48,10 +48,9 @@
           </div>
 
           <!-- Delete Button -->
-          <button
-            class="p-2 hover:bg-red-50 rounded-xl transition-all duration-300 hover:scale-110 group/delete shrink-0"
-            (click)="deleteComment(comment.id)" title="Delete comment">
-            <svg class="w-5 h-5 text-gray-500 group-hover/delete:text-red-600" fill="none" stroke="currentColor"
+          <button class="p-2 hover:bg-red-50 rounded-xl transition-all duration-300 hover:scale-110 shrink-0"
+            (click)="openDeleteModal(comment.id); $event.stopPropagation()" title="Delete comment">
+            <svg class="w-5 h-5 text-gray-500 group-hover:text-red-600" fill="none" stroke="currentColor"
               viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -67,7 +66,7 @@
 
         <!-- Comment Actions -->
         <div class="flex items-center gap-4">
-          @if (replyingTo !== comment.id) {
+          <!-- Reply Button - Always visible -->
           <button
             class="flex items-center gap-2 text-[#19A7CE] hover:text-[#1488B0] font-medium text-sm transition-colors duration-300"
             (click)="startReply(comment.id)">
@@ -77,17 +76,23 @@
             </svg>
             Reply
           </button>
-          }
 
+          <!-- Clickable Reply Count Toggle -->
           @if (comment.replies && comment.replies.length > 0) {
-          <span class="flex items-center gap-1.5 text-gray-600 text-sm font-medium">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          <button
+            class="flex items-center gap-1.5 text-gray-600 hover:text-[#19A7CE] text-sm font-medium transition-all duration-300 hover:scale-105 cursor-pointer group"
+            (click)="toggleReplies(comment.id)"
+            title="Click to {{ isExpanded(comment.id) ? 'collapse' : 'expand' }} replies">
+
+            <!-- Chevron Icon -->
+            <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110"
+              [class]="{'rotate-180': isExpanded(comment.id)}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
+
             {{ comment.replies.length }}
             {{ comment.replies.length === 1 ? 'reply' : 'replies' }}
-          </span>
+          </button>
           }
         </div>
 
@@ -118,23 +123,19 @@
         }
       </div>
 
-      <!-- Nested Replies (Recursive) -->
-      @if (comment.replies && comment.replies.length > 0) {
+      @if (comment.replies && comment.replies.length > 0 && isExpanded(comment.id)) {
       <div class="mt-6 relative pl-8 sm:pl-12">
-        <!-- Connection Line -->
         <div
           class="absolute left-3 sm:left-6 top-0 bottom-0 w-0.5 bg-linear-to-b from-[#19A7CE]/30 to-transparent rounded-full">
         </div>
 
-        <app-comment-thread [comments]="comment.replies" [taskId]="taskId" [level]="level + 1">
-        </app-comment-thread>
+        <app-comment-thread [comments]="comment.replies" [taskId]="taskId" [level]="level + 1"></app-comment-thread>
       </div>
       }
     </div>
     }
   </div>
 
-  <!-- Empty State -->
   @if (comments.length === 0 && level === 0) {
   <div class="bg-white/90 backdrop-blur-md rounded-2xl border border-gray-200/50 p-12 text-center shadow-xl">
     <div class="w-16 h-16 bg-[#19A7CE]/10 rounded-2xl p-4 mx-auto mb-6 border border-[#19A7CE]/20">
@@ -147,3 +148,47 @@
   </div>
   }
 </div>
+
+@if(showDeleteModal){
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in" (click)="closeDeleteModal($event)">
+
+  <div
+    class="bg-white/95 backdrop-blur-xl rounded-3xl border border-white/30 shadow-2xl max-w-md w-full mx-4 transform animate-slide-up relative overflow-hidden"
+    (click)="$event.stopPropagation()">
+
+    <!-- Modal Background Decor -->
+    <div class="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-red-400 via-red-500 to-red-600"></div>
+
+    <!-- Modal Content -->
+    <div class="p-8 relative z-10">
+      <!-- Icon -->
+      <div
+        class="w-16 h-16 bg-red-100/80 rounded-2xl p-4 mx-auto mb-6 border border-red-200/50 flex items-center justify-center shadow-lg">
+        <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 8v4m0 4h.01M19 10a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+
+      <!-- Title -->
+      <h3 class="text-xl font-bold text-gray-900 text-center mb-2">Delete Comment?</h3>
+
+      <!-- Description -->
+      <p class="text-gray-700 text-center mb-8">This action will delete the comment and all its replies permanently.</p>
+
+      <!-- Buttons -->
+      <div class="flex gap-3">
+        <button (click)="closeDeleteModal()"
+          class="flex-1 px-6 py-3 bg-gray-100/80 hover:bg-gray-200 text-gray-900 rounded-xl font-semibold border border-gray-200/50 transition-all duration-300">
+          Cancel
+        </button>
+        <button (click)="confirmDeleteComment()"
+          class="flex-1 px-6 py-3 bg-linear-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
+          Delete Comment
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+}
