@@ -52,7 +52,7 @@ export class CommentStore {
     const addReply = (comments: Comment[]): boolean => {
       for (const comment of comments) {
         if (comment.id === parentId) {
-          comment.replies = [...comment.replies, reply]; // Immutable update
+          comment.replies = [...comment.replies, reply];
           return true;
         }
         

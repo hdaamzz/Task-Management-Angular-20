@@ -20,9 +20,12 @@ import { Subject, takeUntil } from 'rxjs';
 export class TaskDetails implements OnInit, OnDestroy {
   task: Task | null = null;
   taskId: string = '';
+  showDeleteModal: boolean = false;
+
   
   private disposeReaction: IReactionDisposer | null = null;
   private readonly destroy$ = new Subject<void>();
+  
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -84,27 +87,34 @@ export class TaskDetails implements OnInit, OnDestroy {
   }
 
   deleteTask(): void {
-    if (!this.task) {
-      console.error('No task to delete');
-      return;
-    }
-
-    const confirmMessage = `Are you sure you want to delete "${this.task.title}"?`;
-    
-    if (confirm(confirmMessage)) {
-      const success = this.taskStore.deleteTask(this.task.id);
-      
-      if (success) {
-        this.navigateToTaskList();
-      } else {
-        console.error('Failed to delete task');
-        alert('Failed to delete task. Please try again.');
-      }
-    }
+    this.openDeleteModal();
   }
 
   navigateToCalendar(): void {
     this.router.navigate(['/calendar']);
+  }
+  openDeleteModal(): void {
+    this.showDeleteModal = true;
+    document.body.style.overflow = 'hidden'; 
+  }
+
+  closeDeleteModal(event?: MouseEvent): void {
+    if (event?.target === event?.currentTarget) {
+      this.showDeleteModal = false;
+      document.body.style.overflow = 'unset'; 
+    }
+  }
+
+  confirmDelete(): void {
+    if (!this.task) {
+      console.error('No task to delete');
+      this.closeDeleteModal();
+      return;
+    }
+
+    this.taskStore.deleteTask(this.task.id);
+    this.closeDeleteModal();
+    this.navigateToTaskList();
   }
 
   get comments() {

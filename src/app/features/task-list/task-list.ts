@@ -17,6 +17,8 @@ import { Subject, takeUntil } from 'rxjs';
 export class TaskList implements OnInit {
   showTaskForm = false;
   editingTask: Task | null = null;
+  showDeleteModal = false;
+  taskToDelete: Task | null = null;
   
   readonly TaskStatus = TaskStatus;
   private readonly destroy$ = new Subject<void>();
@@ -76,20 +78,39 @@ export class TaskList implements OnInit {
   }
 
 
-  deleteTask(task: Task, event: Event): void {
+  openDeleteModal(task: Task, event: Event): void {
     event.preventDefault();
     event.stopPropagation();
-
-    const confirmMessage = `Are you sure you want to delete "${task.title}"?`;
     
-    if (confirm(confirmMessage)) {
-      const success = this.taskStore.deleteTask(task.id);
-      
-      if (!success) {
-        console.error(`Failed to delete task: ${task.id}`);
-        alert('Failed to delete task. Please try again.');
-      }
+    this.taskToDelete = task;
+    this.showDeleteModal = true;
+    document.body.style.overflow = 'hidden'; 
+  }
+
+  closeDeleteModal(event?: MouseEvent): void {
+    if (event?.target === event?.currentTarget) {
+      this.showDeleteModal = false;
+      this.taskToDelete = null;
+      document.body.style.overflow = 'unset'; 
     }
+  }
+
+  confirmDelete(): void {
+    if (!this.taskToDelete) {
+      console.error('No task to delete');
+      this.closeDeleteModal();
+      return;
+    }
+
+    const success = this.taskStore.deleteTask(this.taskToDelete.id);
+    
+    if (success) {
+      console.log(`Task "${this.taskToDelete.title}" deleted successfully`);
+    } else {
+      console.error(`Failed to delete task: ${this.taskToDelete.id}`);
+    }
+    
+    this.closeDeleteModal();
   }
   getShortDescription(html: string): string {
     const div = document.createElement('div');
