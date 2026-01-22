@@ -41,7 +41,7 @@
           </svg>
         </a>
         <!-- Delete Button -->
-        <button (click)="openDeleteModal()"
+        <button (click)="showDeleteModal = true"
           class="group p-3 hover:bg-red-50 rounded-xl transition-all duration-300 hover:scale-110 backdrop-blur-sm"
           title="Delete Task">
           <svg class="w-6 h-6 text-gray-500 group-hover:text-red-600" fill="none" stroke="currentColor"
@@ -207,50 +207,13 @@
 </div>
 }
 
-@if(showDeleteModal){
-  <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in"
-     (click)="closeDeleteModal($event)">
-  
-  <div class="bg-white/95 backdrop-blur-xl rounded-3xl border border-white/30 shadow-2xl max-w-md w-full mx-4 sm:mx-8 transform animate-slide-up relative overflow-hidden"
-       (click)="$event.stopPropagation()">
-    
-    <!-- Modal Background Decor -->
-    <div class="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-red-400 via-red-500 to-red-600"></div>
-    <div class="absolute -top-4 -right-4 w-32 h-32 bg-red-500/10 rounded-full blur-xl"></div>
-    
-    <!-- Modal Content -->
-    <div class="p-8 sm:p-10 relative z-10">
-      
-      <!-- Icon -->
-      <div class="w-20 h-20 bg-red-100/80 rounded-2xl p-5 mx-auto mb-6 border border-red-200/50 flex items-center justify-center shadow-lg">
-        <svg class="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 8v4m0 4h.01M19 10a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </div>
-      
-      <!-- Title -->
-      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-4 leading-tight">
-        Delete Task?
-      </h2>
-      
-      <!-- Description -->
-      <p class="text-gray-700 text-lg text-center leading-relaxed mb-8 max-w-sm mx-auto">
-        Are you sure you want to delete <strong>"{{ task?.title }}"</strong>? This action cannot be undone.
-      </p>
-      
-      <!-- Action Buttons -->
-      <div class="flex flex-col sm:flex-row gap-3 pt-4">
-        <button (click)="closeDeleteModal()"
-                class="flex-1 px-6 py-3 bg-gray-100/80 hover:bg-gray-200 text-gray-900 rounded-xl font-semibold text-base border border-gray-200/50 transition-all duration-300 hover:shadow-md backdrop-blur-sm">
-          Cancel
-        </button>
-        <button (click)="confirmDelete()"
-                class="flex-1 px-6 py-3 bg-linear-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm transform hover:-translate-y-0.5">
-          Delete Task
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-}
+<app-delete-modal
+  [showModal]="showDeleteModal"
+  title="Delete Task?"
+  description="Are you sure you want to delete"
+  [itemName]="task?.title"
+  cancelButtonText="Cancel"
+  confirmButtonText="Delete Task"
+  (cancel)="closeDeleteModal()"
+  (confirm)="confirmDelete()">
+</app-delete-modal>

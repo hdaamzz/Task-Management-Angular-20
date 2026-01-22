@@ -10,10 +10,11 @@ import { FormsModule } from '@angular/forms';
 import { FormatDatePipe } from "../../shared/pipes/FormatDate/format-date-pipe";
 import { FormatDateTimePipe } from "../../shared/pipes/FormatDateTime/format-date-time-pipe";
 import { Subject, takeUntil } from 'rxjs';
+import { DeleteModal } from '../../shared/components/delete-modal/delete-modal';
 
 @Component({
   selector: 'app-task-details',
-  imports: [CommonModule, FormsModule, RouterLink, CommentThread, FormatDatePipe, FormatDateTimePipe],
+  imports: [CommonModule, FormsModule, RouterLink, CommentThread, FormatDatePipe, FormatDateTimePipe,DeleteModal],
   templateUrl: './task-details.html',
   styleUrl: './task-details.css',
 })
@@ -86,26 +87,15 @@ export class TaskDetails implements OnInit, OnDestroy {
     this._router.navigate(['/tasks']);
   }
 
-  deleteTask(): void {
-    this.openDeleteModal();
-  }
-
   navigateToCalendar(): void {
     this._router.navigate(['/calendar']);
   }
-  openDeleteModal(): void {
-    this.showDeleteModal = true;
-    document.body.style.overflow = 'hidden'; 
+
+  closeDeleteModal(): void { 
+    this.showDeleteModal = false;
   }
 
-  closeDeleteModal(event?: MouseEvent): void {
-    if (event?.target === event?.currentTarget) {
-      this.showDeleteModal = false;
-      document.body.style.overflow = 'unset'; 
-    }
-  }
-
-  confirmDelete(): void {
+  confirmDelete(): void { 
     if (!this.task) {
       console.error('No task to delete');
       this.closeDeleteModal();

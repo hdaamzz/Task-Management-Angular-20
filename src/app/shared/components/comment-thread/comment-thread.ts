@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Comment } from '../../../core/models/comment.model';
 import { Subject } from 'rxjs';
+import { DeleteModal } from '../delete-modal/delete-modal';
 
 
 @Component({
   selector: 'app-comment-thread',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DeleteModal],
   templateUrl: './comment-thread.html',
   styleUrl: './comment-thread.css',
 })
@@ -118,18 +119,15 @@ export class CommentThread implements OnDestroy {
   deleteComment(commentId: string): void {
     this.openDeleteModal(commentId);
   }
+
   openDeleteModal(commentId: string): void {
     this.commentToDelete = commentId;
     this.showDeleteModal = true;
-    document.body.style.overflow = 'hidden';
   }
 
-  closeDeleteModal(event?: MouseEvent): void {
-    if (event?.target === event?.currentTarget) {
-      this.showDeleteModal = false;
-      this.commentToDelete = null;
-      document.body.style.overflow = 'unset';
-    }
+  closeDeleteModal(): void {
+    this.showDeleteModal = false;
+    this.commentToDelete = null;
   }
 
   confirmDeleteComment(): void {
@@ -149,6 +147,7 @@ export class CommentThread implements OnDestroy {
 
     this.closeDeleteModal();
   }
+
   toggleReplies(commentId: string): void {
     if (this.isExpanded(commentId)) {
       this.expandedReplies.delete(commentId);

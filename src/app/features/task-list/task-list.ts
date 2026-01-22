@@ -7,10 +7,11 @@ import { TaskService } from '../../core/services/task.service';
 import { TaskStore } from '../../stores/task.store';
 import { Subject, takeUntil } from 'rxjs';
 import { TaskCard } from "../../shared/components/task-card/task-card";
+import { DeleteModal } from '../../shared/components/delete-modal/delete-modal';
 
 @Component({
   selector: 'app-task-list',
-  imports: [CommonModule, RouterLink, TaskForm, TaskCard],
+  imports: [CommonModule, RouterLink, TaskForm, TaskCard, DeleteModal],
   templateUrl: './task-list.html',
   styleUrl: './task-list.css',
 })
@@ -19,7 +20,7 @@ export class TaskList implements OnInit {
   editingTask: Task | null = null;
   showDeleteModal = false;
   taskToDelete: Task | null = null;
-  
+
   readonly TaskStatus = TaskStatus;
   private readonly _destroy$ = new Subject<void>();
 
@@ -27,7 +28,7 @@ export class TaskList implements OnInit {
     public readonly taskStore: TaskStore,
     private readonly _taskService: TaskService,
     private readonly _router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadTasks();
@@ -76,20 +77,9 @@ export class TaskList implements OnInit {
   navigateToCalendar(): void {
     this._router.navigate(['/calendar']);
   }
-
-
-  openDeleteModal(task: Task): void {
-    this.taskToDelete = task;
-    this.showDeleteModal = true;
-    document.body.style.overflow = 'hidden'; 
-  }
-
-  closeDeleteModal(event?: MouseEvent): void {
-    if (event?.target === event?.currentTarget) {
-      this.showDeleteModal = false;
-      this.taskToDelete = null;
-      document.body.style.overflow = 'unset'; 
-    }
+  closeDeleteModal(): void {
+    this.showDeleteModal = false;
+    this.taskToDelete = null;
   }
 
   confirmDelete(): void {
@@ -100,17 +90,18 @@ export class TaskList implements OnInit {
     }
 
     const success = this.taskStore.deleteTask(this.taskToDelete.id);
-    
+
     if (success) {
       console.log(`Task "${this.taskToDelete.title}" deleted successfully`);
     } else {
       console.error(`Failed to delete task: ${this.taskToDelete.id}`);
     }
-    
+
     this.closeDeleteModal();
   }
 
-  trackByTaskId(index: number, task: Task): string {
-    return task.id;
+  openDeleteModal(task: Task): void {
+    this.taskToDelete = task;
+    this.showDeleteModal = true;
   }
 }
