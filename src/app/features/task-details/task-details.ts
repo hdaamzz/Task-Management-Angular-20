@@ -1,32 +1,39 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RouterLink, ActivatedRoute, Router } from '@angular/router';
-import { IReactionDisposer, reaction } from 'mobx';
-import { Task } from '../../core/models/task.model';
-import { CommentStore } from '../../stores/comment.store';
-import { TaskStore } from '../../stores/task.store';
-import { CommentThread } from '../../shared/components/comment-thread/comment-thread';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { reaction, IReactionDisposer } from 'mobx';
 import { FormsModule } from '@angular/forms';
-import { FormatDatePipe } from "../../shared/pipes/FormatDate/format-date-pipe";
-import { FormatDateTimePipe } from "../../shared/pipes/FormatDateTime/format-date-time-pipe";
-import { Subject, takeUntil } from 'rxjs';
+
+import { TaskStore } from '../../stores/task.store';
+import { CommentStore } from '../../stores/comment.store';
+
+import { CommentThread } from '../../shared/components/comment-thread/comment-thread';
 import { DeleteModal } from '../../shared/components/delete-modal/delete-modal';
+
+import { FormatDatePipe } from '../../shared/pipes/FormatDate/format-date-pipe';
+import { FormatDateTimePipe } from '../../shared/pipes/FormatDateTime/format-date-time-pipe';
+import { SafeHtmlPipe } from "../../shared/pipes/SafeHtml/safe-html-pipe";
 
 @Component({
   selector: 'app-task-details',
-  imports: [CommonModule, FormsModule, RouterLink, CommentThread, FormatDatePipe, FormatDateTimePipe,DeleteModal],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    CommentThread,
+    DeleteModal,
+    FormatDatePipe,
+    FormatDateTimePipe,
+    SafeHtmlPipe
+],
   templateUrl: './task-details.html',
   styleUrl: './task-details.css',
 })
 export class TaskDetails implements OnInit, OnDestroy {
-  task: Task | null = null;
-  taskId: string = '';
-  showDeleteModal: boolean = false;
+  taskId = '';
+  showDeleteModal = false;
 
-  
-  private _disposeReaction: IReactionDisposer | null = null;
-  private readonly _destroy$ = new Subject<void>();
-  
+  private disposeReaction?: IReactionDisposer;
 
   constructor(
     private readonly _route: ActivatedRoute,
@@ -36,75 +43,41 @@ export class TaskDetails implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._route.paramMap
-      .pipe(takeUntil(this._destroy$))
-      .subscribe(params => {
-        this.taskId = params.get('id') || '';
-        if (this.taskId) {
-          this.loadTask();
-          this.setupReaction();
-        } else {
-          this.navigateToTaskList();
-        }
-      });
-  }
+    this.taskId = this._route.snapshot.paramMap.get('id') ?? '';
 
-  ngOnDestroy(): void {
-    if (this._disposeReaction) {
-      this._disposeReaction();
+    if (!this.taskId) {
+      this.navigateToTaskList();
+      return;
     }
-    
-    this._destroy$.next();
-    this._destroy$.complete();
-  }
 
-  private setupReaction(): void {
-    this._disposeReaction = reaction(
-      () => this.taskStore.tasks.find(t => t.id === this.taskId),
-      (foundTask) => {
-        this.task = foundTask || null;
-        if (!foundTask) {
-          console.warn(`Task ${this.taskId} no longer exists`);
+    const task = this.taskStore.getTaskById(this.taskId);
+
+    if (!task) {
+      console.warn(`Task ${this.taskId} not found`);
+      this.navigateToTaskList();
+      return;
+    }
+
+    this.taskStore.setSelectedTask(task);
+
+    this.disposeReaction = reaction(
+      () => this.taskStore.selectedTask,
+      task => {
+        if (!task) {
           this.navigateToTaskList();
         }
       }
     );
+}
+
+  ngOnDestroy(): void {
+    this.disposeReaction?.();
   }
 
-  private loadTask(): void {
-    const foundTask = this.taskStore.getTaskById(this.taskId);
-    
-    if (foundTask) {
-      this.task = foundTask;
-      this.taskStore.setSelectedTask(foundTask);
-    } else {
-      console.warn(`Task ${this.taskId} not found`);
-      this.navigateToTaskList();
-    }
-  }
+  // ---- Derived State ----
 
-  private navigateToTaskList(): void {
-    this._router.navigate(['/tasks']);
-  }
-
-  navigateToCalendar(): void {
-    this._router.navigate(['/calendar']);
-  }
-
-  closeDeleteModal(): void { 
-    this.showDeleteModal = false;
-  }
-
-  confirmDelete(): void { 
-    if (!this.task) {
-      console.error('No task to delete');
-      this.closeDeleteModal();
-      return;
-    }
-
-    this.taskStore.deleteTask(this.task.id);
-    this.closeDeleteModal();
-    this.navigateToTaskList();
+  get task() {
+    return this.taskStore.selectedTask;
   }
 
   get comments() {
@@ -113,5 +86,27 @@ export class TaskDetails implements OnInit, OnDestroy {
 
   get commentCount(): number {
     return this.commentStore.getCommentCountForTask(this.taskId);
+  }
+
+  // ---- Actions ----
+
+  navigateToCalendar(): void {
+    this._router.navigate(['/calendar']);
+  }
+
+  closeDeleteModal(): void {
+    this.showDeleteModal = false;
+  }
+
+  confirmDelete(): void {
+    if (!this.task) return;
+
+    this.taskStore.deleteTask(this.task.id);
+    this.closeDeleteModal();
+    this.navigateToTaskList();
+  }
+
+  private navigateToTaskList(): void {
+    this._router.navigate(['/tasks']);
   }
 }

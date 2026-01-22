@@ -188,19 +188,4 @@ export class CalendarView implements OnInit, OnDestroy {
     this.navigateTo(['/tasks']);
   }
 
-  get eventCount(): number {
-    return this.taskStore.tasks.length;
-  }
-
-  get hasEvents(): boolean {
-    return this.taskStore.tasks.length > 0;
-  }
-
-  get taskStatusCounts() {
-    return {
-      pending: this.taskStore.pendingTasks.length,
-      inProgress: this.taskStore.inProgressTasks.length,
-      completed: this.taskStore.completedTasks.length
-    };
-  }
 }

@@ -49,7 +49,7 @@
 
           <!-- Delete Button -->
           <button class="p-2 hover:bg-red-50 rounded-xl transition-all duration-300 hover:scale-110 shrink-0"
-            (click)="openDeleteModal(comment.id); $event.stopPropagation()" title="Delete comment">
+            (click)="openDeleteModal(comment.id); $event.stopPropagation()" title="Delete comment {{ comment.author }}" aria-label="Delete comment by {{ comment.author }}">
             <svg class="w-5 h-5 text-gray-500 group-hover:text-red-600" fill="none" stroke="currentColor"
               viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -69,7 +69,7 @@
           <!-- Reply Button - Always visible -->
           <button
             class="flex items-center gap-2 text-[#19A7CE] hover:text-[#1488B0] font-medium text-sm transition-colors duration-300"
-            (click)="startReply(comment.id)">
+            (click)="startReply(comment.id)" aria-label="Reply to {{ comment.author }}'s comment">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
@@ -82,7 +82,7 @@
           <button
             class="flex items-center gap-1.5 text-gray-600 hover:text-[#19A7CE] text-sm font-medium transition-all duration-300 hover:scale-105 cursor-pointer group"
             (click)="toggleReplies(comment.id)"
-            title="Click to {{ isExpanded(comment.id) ? 'collapse' : 'expand' }} replies">
+            title="Click to {{ isExpanded(comment.id) ? 'collapse' : 'expand' }} replies" aria-label="{{ isExpanded(comment.id) ? 'Collapse' : 'Expand' }} {{ comment.replies.length }} {{ comment.replies.length === 1 ? 'reply' : 'replies' }}">
 
             <!-- Chevron Icon -->
             <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110"
@@ -100,7 +100,7 @@
         @if (replyingTo === comment.id) {
         <div class="mt-6 pt-5 border-t border-gray-200/50">
           <div class="flex flex-col gap-3">
-            <textarea [(ngModel)]="replyText[comment.id]" placeholder="Write a reply..." rows="2"
+            <textarea [appAutofocus]="replyingTo === comment.id" [(ngModel)]="replyText[comment.id]" placeholder="Write a reply..." rows="2"
               class="w-full px-4 py-3 bg-gray-50/80 backdrop-blur-sm border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#19A7CE]/50 focus:border-[#19A7CE]/30 transition-all duration-300 resize-y shadow-sm"
               (keydown.ctrl.enter)="addReply(comment.id)">
                 </textarea>

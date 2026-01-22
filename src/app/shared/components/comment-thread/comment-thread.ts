@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { Comment } from '../../../core/models/comment.model';
 import { Subject } from 'rxjs';
 import { DeleteModal } from '../delete-modal/delete-modal';
+import { Autofocus } from '../../Directives/autofocus';
 
 
 @Component({
   selector: 'app-comment-thread',
-  imports: [CommonModule, FormsModule, DeleteModal],
+  imports: [CommonModule, FormsModule, DeleteModal,Autofocus],
   templateUrl: './comment-thread.html',
   styleUrl: './comment-thread.css',
 })
@@ -72,11 +73,6 @@ export class CommentThread implements OnDestroy {
       if (!this.replyText[commentId]) {
         this.replyText[commentId] = '';
       }
-
-      setTimeout(() => {
-        const textarea = document.querySelector(`textarea[placeholder="Write a reply..."]`) as HTMLTextAreaElement;
-        textarea?.focus();
-      }, 150);
     }
   }
 
