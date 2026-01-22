@@ -50,42 +50,6 @@
   <!-- Main Content -->
   <div class="relative z-10 px-6 lg:px-12">
     <div class="max-w-7xl mx-auto">
-
-      <!-- Header -->
-      <div class="bg-white/90 backdrop-blur-md rounded-2xl border border-gray-200/50 p-6 sm:p-8 mb-8 shadow-xl">
-        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-          <!-- Title -->
-          <div class="flex items-center gap-4">
-            <div
-              class="w-14 h-14 bg-linear-to-br from-[#19A7CE] to-[#1488B0] rounded-2xl p-3.5 flex items-center justify-center shadow-xl">
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Task Calendar</h2>
-          </div>
-
-          <!-- Legend -->
-          <div class="flex flex-wrap gap-6">
-            <div class="flex items-center gap-3 p-3 bg-red-50/80 backdrop-blur-sm rounded-xl border border-red-200/50">
-              <span class="w-4 h-4 bg-red-500/80 rounded-lg shadow-sm"></span>
-              <span class="text-sm font-semibold text-gray-800">Pending</span>
-            </div>
-            <div
-              class="flex items-center gap-3 p-3 bg-yellow-50/80 backdrop-blur-sm rounded-xl border border-yellow-200/50">
-              <span class="w-4 h-4 bg-yellow-500/80 rounded-lg shadow-sm"></span>
-              <span class="text-sm font-semibold text-gray-800">In Progress</span>
-            </div>
-            <div
-              class="flex items-center gap-3 p-3 bg-green-50/80 backdrop-blur-sm rounded-xl border border-green-200/50">
-              <span class="w-4 h-4 bg-green-500/80 rounded-lg shadow-sm"></span>
-              <span class="text-sm font-semibold text-gray-800">Completed</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Loading State -->
       @if (taskStore.isLoading) {
       <div class="bg-white/90 backdrop-blur-md rounded-2xl border border-gray-200/50 p-12 text-center shadow-xl">
