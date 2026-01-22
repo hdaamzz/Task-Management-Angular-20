@@ -5,12 +5,12 @@ import { TaskForm } from '../../shared/components/task-form/task-form';
 import { Task, TaskStatus } from '../../core/models/task.model';
 import { TaskService } from '../../core/services/task.service';
 import { TaskStore } from '../../stores/task.store';
-import { FormatDatePipe } from "../../shared/pipes/format-date-pipe";
 import { Subject, takeUntil } from 'rxjs';
+import { TaskCard } from "../../shared/components/task-card/task-card";
 
 @Component({
   selector: 'app-task-list',
-  imports: [CommonModule, RouterLink, TaskForm, FormatDatePipe],
+  imports: [CommonModule, RouterLink, TaskForm, TaskCard],
   templateUrl: './task-list.html',
   styleUrl: './task-list.css',
 })
@@ -78,10 +78,7 @@ export class TaskList implements OnInit {
   }
 
 
-  openDeleteModal(task: Task, event: Event): void {
-    event.preventDefault();
-    event.stopPropagation();
-    
+  openDeleteModal(task: Task): void {
     this.taskToDelete = task;
     this.showDeleteModal = true;
     document.body.style.overflow = 'hidden'; 
