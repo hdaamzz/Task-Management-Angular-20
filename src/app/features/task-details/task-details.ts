@@ -7,8 +7,8 @@ import { CommentStore } from '../../stores/comment.store';
 import { TaskStore } from '../../stores/task.store';
 import { CommentThread } from '../../shared/components/comment-thread/comment-thread';
 import { FormsModule } from '@angular/forms';
-import { FormatDatePipe } from "../../shared/pipes/format-date-pipe";
-import { FormatDateTimePipe } from "../../shared/pipes/format-date-time-pipe";
+import { FormatDatePipe } from "../../shared/pipes/FormatDate/format-date-pipe";
+import { FormatDateTimePipe } from "../../shared/pipes/FormatDateTime/format-date-time-pipe";
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({

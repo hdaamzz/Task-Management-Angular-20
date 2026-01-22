@@ -109,12 +109,6 @@ export class TaskList implements OnInit {
     
     this.closeDeleteModal();
   }
-  getShortDescription(html: string): string {
-    const div = document.createElement('div');
-    div.innerHTML = html;
-    const text = div.textContent || div.innerText || '';
-    return text.length > 100 ? text.substring(0, 100) + '...' : text;
-  }
 
   trackByTaskId(index: number, task: Task): string {
     return task.id;
