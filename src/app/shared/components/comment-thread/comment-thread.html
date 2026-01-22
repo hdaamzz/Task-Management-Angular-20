@@ -66,7 +66,7 @@
 
         <!-- Comment Actions -->
         <div class="flex items-center gap-4">
-          <!-- Reply Button - Always visible -->
+          @if (!isMaxNestingReached) {
           <button
             class="flex items-center gap-2 text-[#19A7CE] hover:text-[#1488B0] font-medium text-sm transition-colors duration-300"
             (click)="startReply(comment.id)" aria-label="Reply to {{ comment.author }}'s comment">
@@ -76,6 +76,15 @@
             </svg>
             Reply
           </button>
+          } @else {
+          <div class="flex items-center gap-2 text-gray-400 text-sm italic">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            Max depth reached
+          </div>
+          }
 
           <!-- Clickable Reply Count Toggle -->
           @if (comment.replies && comment.replies.length > 0) {
@@ -97,7 +106,7 @@
         </div>
 
         <!-- Reply Input -->
-        @if (replyingTo === comment.id) {
+        @if (replyingTo === comment.id && !isMaxNestingReached) {
         <div class="mt-6 pt-5 border-t border-gray-200/50">
           <div class="flex flex-col gap-3">
             <textarea [appAutofocus]="replyingTo === comment.id" [(ngModel)]="replyText[comment.id]" placeholder="Write a reply..." rows="2"
@@ -124,9 +133,10 @@
       </div>
 
       @if (comment.replies && comment.replies.length > 0 && isExpanded(comment.id)) {
-      <div class="mt-6 relative pl-8 sm:pl-12">
+      <div class="mt-6 relative" [ngClass]="level >= 3 ? 'pl-6' : 'pl-8 sm:pl-12'">
         <div
-          class="absolute left-3 sm:left-6 top-0 bottom-0 w-0.5 bg-linear-to-b from-[#19A7CE]/30 to-transparent rounded-full">
+          class="absolute top-0 bottom-0 w-0.5 bg-linear-to-b from-[#19A7CE]/30 to-transparent rounded-full"
+          [ngClass]="level >= 3 ? 'left-2' : 'left-3 sm:left-6'">
         </div>
 
         <app-comment-thread [comments]="comment.replies" [taskId]="taskId" [level]="level + 1"></app-comment-thread>

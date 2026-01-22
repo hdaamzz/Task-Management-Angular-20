@@ -10,7 +10,7 @@ import { Autofocus } from '../../Directives/autofocus';
 
 @Component({
   selector: 'app-comment-thread',
-  imports: [CommonModule, FormsModule, DeleteModal,Autofocus],
+  imports: [CommonModule, FormsModule, DeleteModal, Autofocus],
   templateUrl: './comment-thread.html',
   styleUrl: './comment-thread.css',
 })
@@ -27,7 +27,7 @@ export class CommentThread implements OnDestroy {
   commentToDelete: string | null = null;
   expandedReplies: Set<string> = new Set();
 
-  private readonly _MAX_NESTING_LEVEL = 5;
+  private readonly _MAX_NESTING_LEVEL = 4; // Changed to 4 (0-4 = 5 levels total)
   private readonly _destroy$ = new Subject<void>();
 
   constructor(private readonly _commentStore: CommentStore) { }
@@ -67,6 +67,11 @@ export class CommentThread implements OnDestroy {
   }
 
   startReply(commentId: string): void {
+    if (this.isMaxNestingReached) {
+      alert('Maximum nesting level reached. Cannot add more replies at this depth.');
+      return;
+    }
+
     if (this.replyingTo !== commentId) {
       this.replyingTo = commentId;
 
@@ -76,12 +81,16 @@ export class CommentThread implements OnDestroy {
     }
   }
 
-
   cancelReply(): void {
     this.replyingTo = null;
   }
 
   addReply(parentId: string): void {
+    if (this.isMaxNestingReached) {
+      alert('Maximum nesting level reached. Cannot add more replies at this depth.');
+      return;
+    }
+
     const text = this.replyText[parentId];
     const trimmedText = text?.trim();
 
@@ -158,7 +167,6 @@ export class CommentThread implements OnDestroy {
 
   // HELPER METHODS
 
-
   formatDate(date: Date): string {
     const now = new Date();
     const commentDate = new Date(date);
@@ -181,11 +189,14 @@ export class CommentThread implements OnDestroy {
   }
 
   getPaddingClass(): string {
-    if (this.level === 0) return 'pl-0';
-    if (this.level === 1) return 'pl-4';
-    if (this.level === 2) return 'pl-8';
-    if (this.level >= 3) return 'pl-12';
-    return 'pl-0';
+    // Cap at level 4 to prevent overflow
+    const cappedLevel = Math.min(this.level, 4);
+    
+    if (cappedLevel === 0) return 'pl-0';
+    if (cappedLevel === 1) return 'pl-4';
+    if (cappedLevel === 2) return 'pl-8';
+    if (cappedLevel === 3) return 'pl-10';
+    return 'pl-12';
   }
 
   getIndentClass(): string {
