@@ -91,9 +91,7 @@ export class TaskList implements OnInit {
 
     const success = this.taskStore.deleteTask(this.taskToDelete.id);
 
-    if (success) {
-      console.log(`Task "${this.taskToDelete.title}" deleted successfully`);
-    } else {
+    if (!success) {
       console.error(`Failed to delete task: ${this.taskToDelete.id}`);
     }
 

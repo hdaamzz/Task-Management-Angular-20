@@ -89,9 +89,7 @@ export class TaskForm implements OnInit, OnDestroy {
   private setupFormListeners(): void {
     this.taskForm.valueChanges
       .pipe(takeUntil(this._destroy$))
-      .subscribe(values => {
-        console.log('Form values changed:', values);
-      });
+      .subscribe();
   }
 
   onSubmit(): void {
@@ -111,15 +109,12 @@ export class TaskForm implements OnInit, OnDestroy {
       if (this.task) {
         const success = this._taskStore.updateTask(this.task.id, formData);
         if (success) {
-          console.log('Task updated successfully');
           this.formSubmit.emit();
         } else {
           console.error('Failed to update task');
           alert('Failed to update task. Please try again.');
         }
       } else {
-        const newTask = this._taskStore.addTask(formData);
-        console.log('Task created successfully', newTask);
         this.formSubmit.emit();
       }
     } catch (error) {

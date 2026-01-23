@@ -59,7 +59,6 @@ export class CommentThread implements OnDestroy {
       );
 
       this.newCommentText = '';
-      console.log('Top-level comment added');
     } catch (error) {
       console.error('Error adding comment:', error);
       alert('Failed to add comment. Please try again.');
@@ -114,7 +113,6 @@ export class CommentThread implements OnDestroy {
 
       this.replyText[parentId] = '';
       this.replyingTo = null;
-      console.log('Reply added to comment:', parentId);
     } catch (error) {
       console.error('Error adding reply:', error);
       alert('Failed to add reply. Please try again.');
@@ -141,9 +139,7 @@ export class CommentThread implements OnDestroy {
     try {
       const success = this._commentStore.deleteComment(this.commentToDelete);
 
-      if (success) {
-        console.log('Comment deleted:', this.commentToDelete);
-      } else {
+      if (!success) {
         console.error('Failed to delete comment');
       }
     } catch (error) {

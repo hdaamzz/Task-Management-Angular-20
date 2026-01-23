@@ -78,7 +78,6 @@ export class CalendarView implements OnInit, OnDestroy {
     this._disposeReaction = reaction(
       () => this.taskStore.tasks.slice(),
       (tasks) => {
-        console.log('Tasks changed, updating calendar', tasks.length);
         this.updateCalendarEvents();
       },
       {
@@ -102,7 +101,6 @@ export class CalendarView implements OnInit, OnDestroy {
       .pipe(takeUntil(this._destroy$))
       .subscribe({
         next: (tasks) => {
-          console.log('Tasks loaded successfully:', tasks.length);
           this.taskStore.setTasks(tasks);
           this.taskStore.setLoading(false);
           this.updateCalendarEvents();
@@ -120,7 +118,6 @@ export class CalendarView implements OnInit, OnDestroy {
       this.transformTaskToEvent(task)
     );
 
-    console.log('Updating calendar with events:', events.length);
 
     this.calendarOptions.update(options => ({
       ...options,
@@ -176,7 +173,6 @@ export class CalendarView implements OnInit, OnDestroy {
       return;
     }
 
-    console.log('Calendar event clicked:', taskId);
     this.navigateTo(['/tasks', taskId]);
   }
 
