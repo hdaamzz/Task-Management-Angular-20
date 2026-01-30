@@ -1,6 +1,6 @@
 # Task Management Application
 
-An Angular 20 task management application with MobX state management, rich text editing, multi-level comments, and calendar integration.
+An Angular 20 Task Management Application with MobX state management, rich text editing, multi-level comments, and calendar integration.
 
 ## 🚀 Features
 
@@ -27,7 +27,6 @@ An Angular 20 task management application with MobX state management, rich text 
 - **MobX** - State management
 - **ngx-quill** - Rich text editor
 - **FullCalendar** - Calendar integration
-- **TypeScript** - Type safety
 - **RxJS** - Reactive programming
 - **TailWind CSS** - Modern styling
 
@@ -60,7 +59,7 @@ Navigate to `http://localhost:4200/`
 ## 🎯 Usage
 
 ### Adding a Task
-1. Click "➕ Add New Task" on the task list page
+1. Click "Add New Task" on the task list page
 2. Fill in the task details:
    - Title (required)
    - Description with rich text formatting
